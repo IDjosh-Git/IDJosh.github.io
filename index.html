@@ -171,16 +171,20 @@ button{cursor:pointer;font-family:inherit}
 #home-reports-section{max-width:1180px;margin:0 auto;padding:0 56px 0;position:relative;z-index:1}
 .home-reports-preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:32px}
  
-.home-rp-card{background:var(--ink2);border:1px solid var(--rim);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:transform .3s,border-color .3s,box-shadow .3s}
-.home-rp-card:hover{transform:translateY(-5px);border-color:rgba(201,168,76,.35);box-shadow:0 24px 60px rgba(0,0,0,.5)}
-.home-rp-img{height:160px;overflow:hidden;position:relative;background:var(--ink3)}
-.home-rp-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.home-rp-card:hover .home-rp-img img{transform:scale(1.07)}
-.home-rp-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,8,10,.8) 0%,transparent 55%)}
-.home-rp-badge{position:absolute;top:10px;left:10px}
-.home-rp-info{padding:14px}
-.home-rp-title{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.2}
-.home-rp-meta{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+  .home-rp-card{background:var(--ink2);border:1px solid var(--rim);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:all .4s cubic-bezier(0.2, 0.8, 0.2, 1);display:flex;flex-direction:column}
+  .home-rp-card:hover{transform:translateY(-8px);border-color:rgba(201,168,76,.4);box-shadow:0 30px 70px rgba(0,0,0,.6)}
+  .home-rp-img{height:200px;overflow:hidden;position:relative;background:var(--ink3)}
+  .home-rp-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(0.2, 0.8, 0.2, 1)}
+  .home-rp-card:hover .home-rp-img img{transform:scale(1.1)}
+  .home-rp-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,8,10,0.9) 0%,transparent 70%);opacity:0.6;transition:opacity 0.3s}
+  .home-rp-card:hover .home-rp-img-overlay{opacity:0.9}
+  .home-rp-badge{position:absolute;top:12px;left:12px;z-index:2}
+  .home-rp-info{padding:20px;flex-grow:1;display:flex;flex-direction:column;justify-content:space-between}
+  .home-rp-title{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.3}
+  .home-rp-meta{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
+  .home-rp-cta{font-size:11px;font-weight:600;color:var(--gold);display:flex;align-items:center;gap:6px;margin-top:auto}
+  .home-rp-cta svg{transition:transform 0.3s}
+  .home-rp-card:hover .home-rp-cta svg{transform:translateX(4px)}
  
 .no-reports-hint{text-align:center;padding:48px 20px;background:var(--ink2);border:1px dashed var(--rim2);border-radius:var(--r2);color:var(--text3);font-size:13px;margin-top:32px}
 .no-reports-hint .nrh-icon{font-size:32px;margin-bottom:12px;opacity:.5}
@@ -396,7 +400,13 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
 .dm-section-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-bottom:9px;display:flex;align-items:center;gap:7px}
 .dm-section-label::after{content:'';flex:1;height:1px;background:var(--rim)}
 .dm-desc{font-size:14px;color:var(--text2);line-height:1.9;margin-bottom:22px}
-.dm-tools{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:5px}
+.dm-tools{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+.dm-comments-wrap{background:var(--ink2);border:1px solid var(--rim);border-radius:var(--r);padding:20px;margin-bottom:24px}
+.dm-comments-wrap .comments-list{max-height:300px;overflow-y:auto;margin-bottom:16px;padding-right:8px}
+.dm-comments-wrap .comment-item{background:var(--ink3);border:1px solid var(--rim);border-radius:var(--r);padding:12px;margin-bottom:10px}
+.dm-comments-wrap .comment-form{display:flex;gap:10px}
+.dm-comments-wrap .comment-input{flex:1;background:var(--ink3);border:1px solid var(--rim);border-radius:var(--r);padding:10px 14px;color:var(--text);font-size:13px}
+.dm-comments-wrap .comment-submit{background:var(--gold);color:var(--ink);border:none;border-radius:var(--r);padding:0 18px;font-weight:700;font-size:12px;cursor:pointer}
 .dm-highlights{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:7px}
 .dm-hl{background:var(--ink3);border:1px solid var(--rim);border-radius:var(--r);padding:16px;text-align:center}
 .dm-hl-num{font-family:'Fraunces',serif;font-size:28px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:3px}
@@ -951,7 +961,8 @@ document.getElementById('avatarInput').addEventListener('change',function(){
 function toggleComments(btn,id){btn.classList.toggle('open');document.getElementById('cb-'+id).classList.toggle('open')}
  
 function postComment(id){
-  const inp=document.getElementById('ci-'+id);
+  const inp=document.getElementById('ci-'+id) || document.getElementById('dm-ci-'+id);
+  if(!inp) return;
   const txt=inp.value.trim();if(!txt)return;
   if(!comments[id])comments[id]=[];
   comments[id].push({name:'You',text:txt,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
@@ -1153,40 +1164,46 @@ function removeCard(id,thumbEl){
 /* ═══════════════════════════════════════════
    HOME PREVIEW
 ═══════════════════════════════════════════ */
-function renderHomePreview(){
-  const container=document.getElementById('homeReportsPreview');
-  if(!container) return;
-  // Update stat
-  const stat=document.getElementById('home-stat-projects');
-  if(stat) stat.textContent=Math.max(10, projects.length);
+  function renderHomePreview(){
+    const container=document.getElementById('homeReportsPreview');
+    if(!container) return;
+    // Update stat
+    const stat=document.getElementById('home-stat-projects');
+    if(stat) stat.textContent=Math.max(10, projects.length);
  
-  if(!projects.length){
-    container.innerHTML=`
-      <div class="no-reports-hint" style="grid-column:1/-1">
-        <div class="nrh-icon">📊</div>
-        <strong>No reports uploaded yet</strong>
-        Upload your dashboards in the Reports section — they'll appear here automatically.
-      </div>`;
-    return;
+    if(!projects.length){
+      container.innerHTML=`
+        <div class="no-reports-hint" style="grid-column:1/-1">
+          <div class="nrh-icon">📊</div>
+          <strong>No reports uploaded yet</strong>
+          Upload your dashboards in the Reports section — they'll appear here automatically.
+        </div>`;
+      return;
+    }
+ 
+    const recent=projects.slice().reverse().slice(0,4);
+    container.innerHTML=recent.map(p=>{
+      const tc=tagClasses[p.cat]||'t-dim';
+      return `
+        <div class="home-rp-card" onclick="openDetail('${p.id}')">
+          <div class="home-rp-img">
+            <img src="${p.src}" alt="${escHtml(p.title)}"/>
+            <div class="home-rp-img-overlay"></div>
+            <div class="home-rp-badge"><span class="tag ${tc}">${escHtml(p.cat)}</span></div>
+          </div>
+          <div class="home-rp-info">
+            <div>
+              <div class="home-rp-meta">${escHtml(p.year)} · ${escHtml(p.tools?p.tools.split(',')[0].trim():'')}</div>
+              <div class="home-rp-title">${escHtml(p.title)}</div>
+            </div>
+            <div class="home-rp-cta">
+              Read Report & Comments
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
   }
- 
-  const recent=projects.slice().reverse().slice(0,4);
-  container.innerHTML=recent.map(p=>{
-    const tc=tagClasses[p.cat]||'t-dim';
-    return `
-      <div class="home-rp-card" onclick="showPage('reports')">
-        <div class="home-rp-img">
-          <img src="${p.src}" alt="${escHtml(p.title)}"/>
-          <div class="home-rp-img-overlay"></div>
-          <div class="home-rp-badge"><span class="tag ${tc}">${escHtml(p.cat)}</span></div>
-        </div>
-        <div class="home-rp-info">
-          <div class="home-rp-title">${escHtml(p.title)}</div>
-          <div class="home-rp-meta">${escHtml(p.year)} · ${escHtml(p.tools?p.tools.split(',')[0].trim():'')}</div>
-        </div>
-      </div>`;
-  }).join('');
-}
  
 /* ═══════════════════════════════════════════
    DETAIL MODAL
@@ -1210,6 +1227,26 @@ function openDetail(id){
     }).join('');
   }else{hlEl.style.display='none'}
   document.getElementById('dmTools').innerHTML=d.tools?d.tools.split(',').map(t=>`<span class="tag t-em">${escHtml(t.trim())}</span>`).join(''):'<span class="tag t-dim">Not specified</span>';
+  
+  // Render comments in modal
+  const commentsWrap = document.getElementById('dmComments');
+  if(commentsWrap) {
+    const arr = comments[id] || [];
+    const listHtml = arr.length ? arr.map((c,i)=>`
+      <div class="comment-item">
+        <div class="ci-head"><span class="ci-name">${escHtml(c.name)}</span><span class="ci-time">${c.time}</span></div>
+        <div class="ci-txt">${escHtml(c.text)}</div>
+      </div>`).join('') : '<div class="comments-empty">No comments yet.</div>';
+    
+    commentsWrap.innerHTML = `
+      <div class="comments-list">${listHtml}</div>
+      <div class="comment-form">
+        <input class="comment-input" id="dm-ci-${id}" placeholder="Add a comment…" onkeydown="if(event.key==='Enter') { postComment('${id}'); setTimeout(() => openDetail('${id}'), 50); }"/>
+        <button class="comment-submit" onclick="postComment('${id}'); setTimeout(() => openDetail('${id}'), 50);">Post</button>
+      </div>
+    `;
+  }
+
   document.getElementById('dmLightboxBtn').onclick=()=>{
     document.getElementById('detailModalBg').classList.remove('open');
     openLightbox(d.src);
