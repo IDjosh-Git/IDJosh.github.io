@@ -4,784 +4,1177 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Idowu Joshua | Data Analyst Portfolio</title>
+<title>Idowu Joshua | Elite Data Analyst Portfolio</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
 
-/* =========================
+/* =========================================
 ROOT
-========================= */
+========================================= */
 
 :root{
-  --bg:#000000;
-  --bg2:#050505;
-  --bg3:#0d0d0d;
-  --card:#0f0f10;
-  --border:#1f1f22;
 
-  --gold:#d4af37;
-  --gold2:#f6d66f;
+--bg:#000000;
+--bg2:#070707;
+--bg3:#101010;
 
-  --text:#f3f4f6;
-  --muted:#9ca3af;
+--card:rgba(255,255,255,.03);
 
-  --cyan:#38bdf8;
-  --green:#34d399;
+--border:rgba(255,255,255,.06);
 
-  --shadow:0 20px 60px rgba(0,0,0,.5);
+--gold:#d4af37;
+--gold2:#f6d66f;
+
+--text:#f5f5f5;
+--muted:#8d8d95;
+
+--shadow:0 20px 70px rgba(0,0,0,.65);
+
 }
 
-/* =========================
+/* =========================================
 GLOBAL
-========================= */
+========================================= */
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 html{
-  scroll-behavior:smooth;
+scroll-behavior:smooth;
 }
 
 body{
-  background:
-  radial-gradient(circle at top right, rgba(212,175,55,.08), transparent 25%),
-  radial-gradient(circle at bottom left, rgba(56,189,248,.05), transparent 25%),
-  #000;
 
-  color:var(--text);
+font-family:'Outfit',sans-serif;
 
-  font-family:'Outfit',sans-serif;
+background:
+radial-gradient(circle at top right, rgba(212,175,55,.08), transparent 25%),
+radial-gradient(circle at bottom left, rgba(56,189,248,.04), transparent 25%),
+#000;
 
-  overflow-x:hidden;
+color:var(--text);
+
+overflow-x:hidden;
+
 }
+
+/* GRID OVERLAY */
 
 body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:
-  linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
-  linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
 
-  background-size:70px 70px;
+content:'';
 
-  pointer-events:none;
+position:fixed;
+
+inset:0;
+
+background-image:
+linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+
+background-size:80px 80px;
+
+pointer-events:none;
+
+z-index:0;
+
 }
 
-section{
-  padding:110px 6%;
-  position:relative;
-  z-index:1;
+/* CURSOR GLOW */
+
+.cursor-glow{
+
+position:fixed;
+
+width:400px;
+height:400px;
+
+background:
+radial-gradient(circle,
+rgba(212,175,55,.08),
+transparent 70%);
+
+border-radius:50%;
+
+pointer-events:none;
+
+transform:translate(-50%,-50%);
+
+z-index:0;
+
 }
 
-img{
-  max-width:100%;
-  display:block;
-}
-
-a{
-  text-decoration:none;
-  color:inherit;
-}
-
-button{
-  border:none;
-  cursor:pointer;
-  font-family:inherit;
-}
-
-/* =========================
-SCROLLBAR
-========================= */
+/* SCROLLBAR */
 
 ::-webkit-scrollbar{
-  width:6px;
+width:6px;
 }
 
 ::-webkit-scrollbar-thumb{
-  background:var(--gold);
+background:var(--gold);
 }
 
-/* =========================
+/* SECTION */
+
+section{
+padding:120px 7%;
+position:relative;
+z-index:2;
+}
+
+/* LINKS */
+
+a{
+text-decoration:none;
+color:inherit;
+}
+
+img{
+display:block;
+max-width:100%;
+}
+
+/* =========================================
 NAVBAR
-========================= */
+========================================= */
 
 nav{
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
 
-  height:75px;
+position:fixed;
 
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+top:0;
+left:0;
+right:0;
 
-  padding:0 6%;
+height:78px;
 
-  backdrop-filter:blur(20px);
+display:flex;
+align-items:center;
+justify-content:space-between;
 
-  background:rgba(0,0,0,.85);
+padding:0 7%;
 
-  border-bottom:1px solid rgba(255,255,255,.05);
+backdrop-filter:blur(20px);
 
-  z-index:999;
+background:rgba(0,0,0,.85);
+
+border-bottom:1px solid rgba(255,255,255,.05);
+
+z-index:999;
+
 }
 
 .logo{
-  font-family:'Playfair Display',serif;
-  font-size:28px;
-  font-weight:900;
+
+font-size:30px;
+
+font-family:'Playfair Display',serif;
+
+font-weight:900;
+
 }
 
 .logo span{
-  color:var(--gold);
+color:var(--gold);
 }
 
 .nav-links{
-  display:flex;
-  gap:40px;
+
+display:flex;
+gap:40px;
+
 }
 
 .nav-links a{
-  color:var(--muted);
-  transition:.3s;
-  font-size:14px;
+
+font-size:14px;
+
+color:var(--muted);
+
+transition:.3s;
+
 }
 
 .nav-links a:hover{
-  color:var(--gold);
+color:var(--gold);
 }
 
-.hire-btn{
-  background:var(--gold);
-  color:#000;
+.nav-btn{
 
-  padding:12px 22px;
+padding:13px 24px;
 
-  border-radius:5px;
+border-radius:6px;
 
-  font-weight:700;
+background:var(--gold);
+
+color:#000;
+
+font-weight:700;
+
 }
 
-/* =========================
+/* =========================================
 HERO
-========================= */
+========================================= */
 
 .hero{
-  min-height:100vh;
 
-  display:grid;
-  grid-template-columns:1fr 420px;
+min-height:100vh;
 
-  align-items:center;
-  gap:70px;
-}
+display:grid;
+grid-template-columns:1.1fr 420px;
 
-.hero-left h1{
-  font-size:90px;
-  line-height:.9;
+gap:80px;
 
-  font-family:'Playfair Display',serif;
-}
+align-items:center;
 
-.hero-left h1 span{
-  color:var(--gold);
-  font-style:italic;
 }
 
 .hero-title{
-  margin-top:25px;
-  color:var(--gold);
-  letter-spacing:4px;
-  text-transform:uppercase;
-  font-size:13px;
+
+font-size:100px;
+
+line-height:.9;
+
+font-family:'Playfair Display',serif;
+
 }
 
-.hero-bio{
-  margin-top:25px;
-  max-width:650px;
-  line-height:1.9;
-  color:var(--muted);
-  font-size:17px;
+.hero-title span{
+color:var(--gold);
+font-style:italic;
+}
+
+.hero-tag{
+
+margin-top:30px;
+
+letter-spacing:5px;
+
+text-transform:uppercase;
+
+font-size:12px;
+
+color:var(--gold);
+
+}
+
+.hero-desc{
+
+margin-top:30px;
+
+max-width:650px;
+
+line-height:2;
+
+color:var(--muted);
+
+font-size:17px;
+
 }
 
 .hero-buttons{
-  display:flex;
-  gap:16px;
-  margin-top:40px;
-  flex-wrap:wrap;
+
+display:flex;
+
+gap:18px;
+
+margin-top:45px;
+
+flex-wrap:wrap;
+
 }
 
 .btn{
-  padding:14px 28px;
-  border-radius:5px;
-  font-weight:700;
-  transition:.3s;
+
+padding:15px 30px;
+
+border-radius:6px;
+
+font-weight:700;
+
+transition:.3s;
+
+border:none;
+
+cursor:pointer;
+
 }
 
 .btn-gold{
-  background:var(--gold);
-  color:#000;
-}
 
-.btn-gold:hover{
-  transform:translateY(-3px);
+background:var(--gold);
+
+color:#000;
+
 }
 
 .btn-dark{
-  border:1px solid var(--border);
-  color:white;
+
+background:transparent;
+
+border:1px solid rgba(255,255,255,.08);
+
+color:#fff;
+
 }
 
-.btn-dark:hover{
-  border-color:var(--gold);
-  color:var(--gold);
+.btn:hover{
+transform:translateY(-3px);
 }
 
-/* =========================
-STATS
-========================= */
+/* STATS */
 
 .stats{
-  margin-top:50px;
 
-  display:flex;
-  gap:50px;
-  flex-wrap:wrap;
+display:flex;
+
+gap:60px;
+
+margin-top:60px;
+
+flex-wrap:wrap;
+
 }
 
 .stat h2{
-  font-size:45px;
-  color:var(--gold);
-  font-family:'Playfair Display',serif;
+
+font-size:48px;
+
+font-family:'Playfair Display',serif;
+
+color:var(--gold);
+
 }
 
 .stat p{
-  color:var(--muted);
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:2px;
+
+margin-top:6px;
+
+font-size:12px;
+
+letter-spacing:3px;
+
+text-transform:uppercase;
+
+color:var(--muted);
+
 }
 
-/* =========================
+/* =========================================
 PROFILE CARD
-========================= */
+========================================= */
 
 .profile-card{
-  background:rgba(255,255,255,.03);
 
-  border:1px solid rgba(255,255,255,.06);
+background:rgba(255,255,255,.03);
 
-  border-radius:20px;
+border:1px solid rgba(255,255,255,.06);
 
-  overflow:hidden;
+border-radius:24px;
 
-  box-shadow:var(--shadow);
+overflow:hidden;
 
-  backdrop-filter:blur(14px);
+backdrop-filter:blur(14px);
+
+box-shadow:var(--shadow);
+
 }
 
 .profile-top{
-  padding:40px;
-  text-align:center;
+
+padding:45px;
+
+text-align:center;
+
 }
 
 .avatar{
-  width:130px;
-  height:130px;
 
-  border-radius:50%;
+width:140px;
+height:140px;
 
-  overflow:hidden;
+margin:auto;
 
-  margin:auto;
+border-radius:50%;
 
-  border:3px solid var(--gold);
+overflow:hidden;
 
-  background:#111;
+border:4px solid var(--gold);
 
-  position:relative;
+background:#111;
+
+position:relative;
+
 }
 
 .avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
 }
 
 .avatar-placeholder{
-  position:absolute;
-  inset:0;
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
+position:absolute;
 
-  font-size:40px;
-  font-weight:900;
+inset:0;
 
-  color:var(--gold);
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:40px;
+
+font-weight:900;
+
+color:var(--gold);
+
 }
 
 .upload-photo{
-  margin-top:18px;
+
+margin-top:20px;
+
 }
 
 .upload-photo input{
-  display:none;
+display:none;
 }
 
 .upload-photo label{
-  display:inline-block;
 
-  padding:10px 16px;
+display:inline-block;
 
-  border-radius:5px;
+padding:10px 16px;
 
-  background:rgba(212,175,55,.1);
+background:rgba(212,175,55,.1);
 
-  border:1px solid rgba(212,175,55,.2);
+border:1px solid rgba(212,175,55,.25);
 
-  color:var(--gold);
+border-radius:6px;
 
-  font-size:13px;
+color:var(--gold);
+
+font-size:13px;
+
+cursor:pointer;
+
 }
 
 .profile-name{
-  margin-top:25px;
-  font-size:26px;
-  font-family:'Playfair Display',serif;
+
+margin-top:28px;
+
+font-size:30px;
+
+font-family:'Playfair Display',serif;
+
 }
 
 .profile-role{
-  margin-top:6px;
-  color:var(--gold);
-  letter-spacing:2px;
-  text-transform:uppercase;
-  font-size:12px;
+
+margin-top:8px;
+
+font-size:12px;
+
+letter-spacing:3px;
+
+text-transform:uppercase;
+
+color:var(--gold);
+
 }
 
 .profile-body{
-  padding:30px;
-  border-top:1px solid rgba(255,255,255,.05);
+
+padding:35px;
+
+border-top:1px solid rgba(255,255,255,.05);
+
 }
 
 .metric{
-  margin-bottom:20px;
+
+margin-bottom:25px;
+
 }
 
 .metric-top{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:8px;
-}
 
-.metric-top span{
-  font-size:13px;
-  color:var(--muted);
+display:flex;
+justify-content:space-between;
+
+margin-bottom:10px;
+
+font-size:13px;
+
+color:var(--muted);
+
 }
 
 .metric-bar{
-  height:6px;
-  background:#111;
-  border-radius:999px;
-  overflow:hidden;
+
+height:7px;
+
+background:#111;
+
+border-radius:999px;
+
+overflow:hidden;
+
 }
 
 .metric-fill{
-  height:100%;
-  background:linear-gradient(90deg,var(--gold),var(--gold2));
+
+height:100%;
+
+background:
+linear-gradient(
+90deg,
+var(--gold),
+var(--gold2)
+);
+
 }
 
-/* =========================
-HEADINGS
-========================= */
+/* =========================================
+SECTION HEADINGS
+========================================= */
 
 .section-title{
-  font-size:58px;
-  font-family:'Playfair Display',serif;
-  margin-bottom:18px;
+
+font-size:60px;
+
+font-family:'Playfair Display',serif;
+
 }
 
 .section-sub{
-  max-width:650px;
-  line-height:1.9;
-  color:var(--muted);
+
+margin-top:20px;
+
+max-width:700px;
+
+line-height:2;
+
+color:var(--muted);
+
 }
 
-/* =========================
+/* =========================================
 ABOUT
-========================= */
+========================================= */
 
 .about-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:40px;
-  margin-top:60px;
+
+display:grid;
+grid-template-columns:1fr 1fr;
+
+gap:30px;
+
+margin-top:60px;
+
 }
 
 .about-card{
-  background:rgba(255,255,255,.03);
 
-  border:1px solid rgba(255,255,255,.06);
+background:var(--card);
 
-  border-radius:18px;
+border:1px solid var(--border);
 
-  padding:30px;
+border-radius:22px;
 
-  backdrop-filter:blur(12px);
+padding:35px;
+
+backdrop-filter:blur(12px);
+
+transition:.3s;
+
+}
+
+.about-card:hover{
+transform:translateY(-8px);
 }
 
 .about-card h3{
-  margin-bottom:15px;
-  color:var(--gold);
+
+margin-bottom:16px;
+
+color:var(--gold);
+
 }
 
 .about-card p{
-  color:var(--muted);
-  line-height:1.9;
+
+line-height:1.9;
+
+color:var(--muted);
+
 }
 
-/* =========================
+/* =========================================
 SKILLS
-========================= */
+========================================= */
 
 .skills-grid{
-  margin-top:60px;
 
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:25px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+
+gap:25px;
+
+margin-top:60px;
+
 }
 
 .skill-card{
-  background:rgba(255,255,255,.03);
 
-  border:1px solid rgba(255,255,255,.05);
+background:var(--card);
 
-  padding:30px;
+border:1px solid var(--border);
 
-  border-radius:18px;
+border-radius:22px;
 
-  transition:.3s;
+padding:35px;
 
-  backdrop-filter:blur(12px);
+transition:.3s;
+
+backdrop-filter:blur(12px);
+
 }
 
 .skill-card:hover{
-  transform:translateY(-8px);
-  border-color:rgba(212,175,55,.3);
+
+transform:translateY(-8px);
+
+border-color:rgba(212,175,55,.3);
+
 }
 
 .skill-card h3{
-  margin-top:16px;
+
+margin-top:18px;
+
+font-size:24px;
+
 }
 
 .skill-card p{
-  margin-top:12px;
-  color:var(--muted);
-  line-height:1.8;
+
+margin-top:15px;
+
+line-height:1.9;
+
+color:var(--muted);
+
 }
 
-/* =========================
+/* =========================================
 PROJECTS
-========================= */
+========================================= */
 
-.filter-buttons{
-  margin-top:35px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
+.filters{
+
+display:flex;
+
+gap:14px;
+
+flex-wrap:wrap;
+
+margin-top:40px;
+
 }
 
-.filter-buttons button{
-  padding:10px 16px;
+.filters button{
 
-  border-radius:999px;
+padding:11px 18px;
 
-  background:#0d0d0d;
+border-radius:999px;
 
-  color:var(--muted);
+background:#111;
 
-  border:1px solid rgba(255,255,255,.05);
+color:var(--muted);
 
-  transition:.3s;
+border:1px solid rgba(255,255,255,.06);
+
+cursor:pointer;
+
+transition:.3s;
+
 }
 
-.filter-buttons button.active,
-.filter-buttons button:hover{
-  background:var(--gold);
-  color:#000;
+.filters button:hover,
+.filters button.active{
+
+background:var(--gold);
+
+color:#000;
+
 }
 
-.upload-zone{
-  margin-top:45px;
+.upload-box{
 
-  border:2px dashed rgba(255,255,255,.08);
+margin-top:50px;
 
-  border-radius:20px;
+padding:70px 30px;
 
-  padding:60px 30px;
+border:2px dashed rgba(255,255,255,.08);
 
-  text-align:center;
+border-radius:24px;
 
-  transition:.3s;
+text-align:center;
 
-  background:rgba(255,255,255,.02);
+background:rgba(255,255,255,.02);
 
-  position:relative;
+position:relative;
+
+transition:.3s;
+
 }
 
-.upload-zone:hover{
-  border-color:var(--gold);
+.upload-box:hover{
+
+border-color:var(--gold);
+
+transform:translateY(-4px);
+
 }
 
-.upload-zone input{
-  position:absolute;
-  inset:0;
-  opacity:0;
-  cursor:pointer;
+.upload-box input{
+
+position:absolute;
+
+inset:0;
+
+opacity:0;
+
+cursor:pointer;
+
 }
 
-.upload-zone h3{
-  margin-top:12px;
+.upload-box h3{
+
+margin-top:15px;
+
+font-size:28px;
+
 }
 
-.upload-zone p{
-  margin-top:12px;
-  color:var(--muted);
+.upload-box p{
+
+margin-top:14px;
+
+color:var(--muted);
+
 }
+
+/* SCROLLABLE REPORT AREA */
 
 .projects-scroll{
-  margin-top:50px;
 
-  max-height:900px;
+margin-top:55px;
 
-  overflow-y:auto;
+max-height:950px;
 
-  padding-right:10px;
+overflow-y:auto;
+
+padding-right:10px;
+
 }
 
 .projects-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-  gap:25px;
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+
+gap:28px;
+
 }
 
+/* PROJECT CARD */
+
 .project-card{
-  background:rgba(255,255,255,.03);
 
-  border:1px solid rgba(255,255,255,.06);
+background:rgba(255,255,255,.03);
 
-  border-radius:20px;
+border:1px solid rgba(255,255,255,.06);
 
-  overflow:hidden;
+border-radius:24px;
 
-  transition:.3s;
+overflow:hidden;
 
-  backdrop-filter:blur(12px);
+transition:.4s;
+
+backdrop-filter:blur(14px);
+
+box-shadow:var(--shadow);
+
 }
 
 .project-card:hover{
-  transform:translateY(-8px);
-  border-color:rgba(212,175,55,.3);
+
+transform:translateY(-10px);
+
+border-color:rgba(212,175,55,.3);
+
 }
 
 .project-image{
-  height:220px;
-  overflow:hidden;
+
+height:260px;
+
+overflow:hidden;
+
+position:relative;
+
 }
 
 .project-image img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+transition:.6s;
+
 }
 
+.project-card:hover img{
+transform:scale(1.08);
+}
+
+/* OVERLAY */
+
+.project-overlay{
+
+position:absolute;
+
+inset:0;
+
+background:
+linear-gradient(
+to top,
+rgba(0,0,0,.9),
+transparent
+);
+
+display:flex;
+
+align-items:flex-end;
+
+padding:25px;
+
+}
+
+.overlay-text{
+
+font-size:13px;
+
+letter-spacing:3px;
+
+text-transform:uppercase;
+
+color:var(--gold);
+
+}
+
+/* CONTENT */
+
 .project-content{
-  padding:25px;
+
+padding:30px;
+
 }
 
 .project-category{
-  color:var(--gold);
-  font-size:12px;
-  letter-spacing:2px;
-  text-transform:uppercase;
+
+font-size:11px;
+
+letter-spacing:3px;
+
+text-transform:uppercase;
+
+color:var(--gold);
+
 }
 
 .project-title{
-  margin-top:10px;
-  font-size:24px;
-  font-family:'Playfair Display',serif;
+
+margin-top:12px;
+
+font-size:28px;
+
+font-family:'Playfair Display',serif;
+
 }
 
 .project-desc{
-  margin-top:14px;
-  color:var(--muted);
-  line-height:1.8;
+
+margin-top:16px;
+
+line-height:1.9;
+
+color:var(--muted);
+
 }
 
 .project-tools{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:18px;
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:10px;
+
+margin-top:22px;
+
 }
 
 .tool{
-  background:rgba(212,175,55,.08);
 
-  color:var(--gold);
+padding:8px 14px;
 
-  padding:7px 12px;
+border-radius:999px;
 
-  border-radius:999px;
+background:rgba(212,175,55,.08);
 
-  font-size:12px;
+color:var(--gold);
+
+font-size:12px;
+
 }
 
 .project-actions{
-  margin-top:25px;
 
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+display:flex;
+
+gap:12px;
+
+margin-top:28px;
+
 }
 
 .project-actions button{
-  flex:1;
 
-  padding:12px;
+flex:1;
 
-  border-radius:5px;
+padding:14px;
 
-  background:#111;
+border-radius:6px;
 
-  color:white;
+background:#111;
 
-  border:1px solid rgba(255,255,255,.05);
+color:#fff;
+
+border:1px solid rgba(255,255,255,.06);
+
+cursor:pointer;
+
+transition:.3s;
+
 }
 
-/* =========================
+.project-actions button:hover{
+
+border-color:var(--gold);
+
+color:var(--gold);
+
+}
+
+/* =========================================
+EMPTY STATE
+========================================= */
+
+.empty-state{
+
+padding:80px 30px;
+
+text-align:center;
+
+border:1px dashed rgba(255,255,255,.08);
+
+border-radius:24px;
+
+grid-column:1/-1;
+
+background:rgba(255,255,255,.02);
+
+}
+
+.empty-state h3{
+
+font-size:32px;
+
+color:var(--gold);
+
+margin-bottom:15px;
+
+}
+
+.empty-state p{
+
+color:var(--muted);
+
+line-height:1.8;
+
+}
+
+/* =========================================
 TESTIMONIALS
-========================= */
+========================================= */
 
-.testimonials-grid{
-  margin-top:60px;
+.testimonial-grid{
 
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-  gap:25px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+
+gap:25px;
+
+margin-top:60px;
+
 }
 
 .testimonial{
-  background:rgba(255,255,255,.03);
 
-  border:1px solid rgba(255,255,255,.05);
+background:var(--card);
 
-  border-radius:20px;
+border:1px solid var(--border);
 
-  padding:35px;
+border-radius:24px;
 
-  backdrop-filter:blur(12px);
+padding:35px;
 
-  transition:.3s;
+backdrop-filter:blur(12px);
+
+transition:.3s;
+
 }
 
 .testimonial:hover{
-  transform:translateY(-6px);
-  border-color:rgba(212,175,55,.3);
+transform:translateY(-8px);
 }
 
 .testimonial p{
-  line-height:1.9;
-  color:var(--muted);
+
+line-height:2;
+
+color:var(--muted);
+
 }
 
 .testimonial-user{
-  margin-top:25px;
+
+margin-top:25px;
+
 }
 
 .testimonial-user h4{
-  color:var(--gold);
+color:var(--gold);
 }
 
-/* =========================
+/* =========================================
 CONTACT
-========================= */
+========================================= */
 
 .contact-box{
-  margin-top:60px;
 
-  background:rgba(255,255,255,.03);
+margin-top:60px;
 
-  border:1px solid rgba(255,255,255,.05);
+background:rgba(255,255,255,.03);
 
-  border-radius:20px;
+border:1px solid rgba(255,255,255,.06);
 
-  padding:50px;
+border-radius:30px;
 
-  text-align:center;
+padding:70px;
+
+text-align:center;
+
+backdrop-filter:blur(14px);
+
 }
 
 .contact-box h2{
-  font-size:52px;
-  font-family:'Playfair Display',serif;
+
+font-size:60px;
+
+font-family:'Playfair Display',serif;
+
 }
 
 .contact-box p{
-  margin-top:18px;
-  color:var(--muted);
+
+margin-top:18px;
+
+color:var(--muted);
+
+line-height:2;
+
 }
 
 .contact-buttons{
-  margin-top:35px;
 
-  display:flex;
-  gap:16px;
-  justify-content:center;
-  flex-wrap:wrap;
+display:flex;
+
+justify-content:center;
+
+gap:18px;
+
+margin-top:40px;
+
+flex-wrap:wrap;
+
 }
 
-/* =========================
+/* =========================================
 FOOTER
-========================= */
+========================================= */
 
 footer{
-  padding:40px 6%;
-  border-top:1px solid rgba(255,255,255,.05);
 
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+padding:45px 7%;
 
-  flex-wrap:wrap;
-  gap:20px;
+border-top:1px solid rgba(255,255,255,.05);
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+flex-wrap:wrap;
+
+gap:20px;
+
 }
 
 footer p{
-  color:var(--muted);
+color:var(--muted);
 }
 
-/* =========================
+/* =========================================
 RESPONSIVE
-========================= */
+========================================= */
 
-@media(max-width:1000px){
+@media(max-width:1050px){
 
 .hero{
-  grid-template-columns:1fr;
+grid-template-columns:1fr;
 }
 
-.hero-left h1{
-  font-size:65px;
+.hero-title{
+font-size:70px;
 }
 
 }
@@ -789,40 +1182,47 @@ RESPONSIVE
 @media(max-width:768px){
 
 .nav-links{
-  display:none;
+display:none;
 }
 
-.hero-left h1{
-  font-size:52px;
+.hero-title{
+font-size:52px;
 }
 
 .section-title{
-  font-size:40px;
+font-size:42px;
 }
 
 .about-grid{
-  grid-template-columns:1fr;
+grid-template-columns:1fr;
 }
 
 .contact-box{
-  padding:35px 20px;
+padding:40px 20px;
 }
 
 }
 
-/* =========================
-ANIMATION
-========================= */
+/* =========================================
+REVEAL
+========================================= */
 
 .reveal{
-  opacity:0;
-  transform:translateY(40px);
-  transition:1s;
+
+opacity:0;
+
+transform:translateY(40px);
+
+transition:1s;
+
 }
 
 .reveal.active{
-  opacity:1;
-  transform:none;
+
+opacity:1;
+
+transform:none;
+
 }
 
 </style>
@@ -830,9 +1230,9 @@ ANIMATION
 
 <body>
 
-<!-- =========================
-NAV
-========================= -->
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
 
 <nav>
 
@@ -848,32 +1248,29 @@ Idowu <span>Joshua</span>
 <a href="#contact">Contact</a>
 </div>
 
-<a href="mailto:esoterikjoshua@gmail.com" class="hire-btn">
+<a href="#contact" class="nav-btn">
 Hire Me
 </a>
 
 </nav>
 
-<!-- =========================
-HERO
-========================= -->
+<!-- HERO -->
 
 <section class="hero">
 
-<div class="hero-left">
+<div>
 
-<p class="hero-title">
+<div class="hero-tag">
 DATA ANALYST · POWER BI · SQL · EXCEL
-</p>
+</div>
 
-<h1>
+<h1 class="hero-title">
 Turning <span>Data</span><br>
 Into Decisions
 </h1>
 
-<p class="hero-bio">
-I design high-impact dashboards, analytics systems, and executive reports that help organizations transform raw data into strategic decisions.
-Specialized in Power BI, SQL, Excel automation, and business intelligence reporting.
+<p class="hero-desc">
+I design high-impact dashboards, executive reports, and analytics systems that help organizations transform raw data into strategic business decisions.
 </p>
 
 <div class="hero-buttons">
@@ -886,10 +1283,6 @@ View Portfolio
 Contact Me
 </a>
 
-<a href="#" class="btn btn-dark">
-Download Resume
-</a>
-
 </div>
 
 <div class="stats">
@@ -900,13 +1293,13 @@ Download Resume
 </div>
 
 <div class="stat">
-<h2 data-count="2">0</h2>
-<p>Years Experience</p>
+<h2 data-count="95">0</h2>
+<p>Data Accuracy</p>
 </div>
 
 <div class="stat">
-<h2 data-count="96">0</h2>
-<p>Data Accuracy</p>
+<h2 data-count="2">0</h2>
+<p>Years Experience</p>
 </div>
 
 </div>
@@ -953,11 +1346,11 @@ Data Analyst
 
 <div class="metric-top">
 <span>Power BI</span>
-<span>90%</span>
+<span>92%</span>
 </div>
 
 <div class="metric-bar">
-<div class="metric-fill" style="width:90%"></div>
+<div class="metric-fill" style="width:92%"></div>
 </div>
 
 </div>
@@ -966,11 +1359,11 @@ Data Analyst
 
 <div class="metric-top">
 <span>SQL</span>
-<span>82%</span>
+<span>84%</span>
 </div>
 
 <div class="metric-bar">
-<div class="metric-fill" style="width:82%"></div>
+<div class="metric-fill" style="width:84%"></div>
 </div>
 
 </div>
@@ -979,11 +1372,11 @@ Data Analyst
 
 <div class="metric-top">
 <span>Excel</span>
-<span>95%</span>
+<span>96%</span>
 </div>
 
 <div class="metric-bar">
-<div class="metric-fill" style="width:95%"></div>
+<div class="metric-fill" style="width:96%"></div>
 </div>
 
 </div>
@@ -994,9 +1387,7 @@ Data Analyst
 
 </section>
 
-<!-- =========================
-ABOUT
-========================= -->
+<!-- ABOUT -->
 
 <section id="about">
 
@@ -1005,7 +1396,7 @@ About Me
 </h2>
 
 <p class="section-sub reveal">
-I help businesses transform raw data into meaningful insights using Power BI, SQL, Excel, and data storytelling.
+Experienced in building dashboards, business intelligence systems, KPI reports, and professional analytics solutions.
 </p>
 
 <div class="about-grid">
@@ -1013,11 +1404,11 @@ I help businesses transform raw data into meaningful insights using Power BI, SQ
 <div class="about-card reveal">
 
 <h3>
-Professional Overview
+Business Intelligence
 </h3>
 
 <p>
-Dedicated Data Analyst with experience building business dashboards, sales analytics systems, healthcare reports, and executive KPI reporting systems.
+Building executive-ready dashboards using Power BI, SQL, and Excel with strong focus on strategic insights.
 </p>
 
 </div>
@@ -1025,11 +1416,11 @@ Dedicated Data Analyst with experience building business dashboards, sales analy
 <div class="about-card reveal">
 
 <h3>
-Core Strengths
+Data Storytelling
 </h3>
 
 <p>
-Data Visualization, Dashboard Development, Data Cleaning, SQL Querying, Power BI, Reporting Automation, KPI Monitoring, and Executive Storytelling.
+Transforming complex datasets into visual narratives that improve business decisions and operational performance.
 </p>
 
 </div>
@@ -1038,9 +1429,7 @@ Data Visualization, Dashboard Development, Data Cleaning, SQL Querying, Power BI
 
 </section>
 
-<!-- =========================
-SKILLS
-========================= -->
+<!-- SKILLS -->
 
 <section id="skills">
 
@@ -1049,50 +1438,48 @@ Skills & Tools
 </h2>
 
 <p class="section-sub reveal">
-A complete analytics toolkit designed to deliver impactful business intelligence.
+Modern analytics technologies and business intelligence expertise.
 </p>
 
 <div class="skills-grid">
 
 <div class="skill-card reveal">
 <h3>📊 Power BI</h3>
-<p>Interactive dashboards, DAX, KPI tracking, business intelligence systems.</p>
+<p>Interactive dashboards, DAX, KPIs and reporting systems.</p>
 </div>
 
 <div class="skill-card reveal">
 <h3>🗄 SQL</h3>
-<p>Data extraction, transformation, joins, data cleaning and optimization.</p>
+<p>Data extraction, transformation and analytics optimization.</p>
 </div>
 
 <div class="skill-card reveal">
 <h3>📗 Excel</h3>
-<p>Advanced formulas, PivotTables, automation, analytics and reporting.</p>
+<p>Advanced reporting, formulas, PivotTables and automation.</p>
 </div>
 
 <div class="skill-card reveal">
-<h3>📈 Data Storytelling</h3>
-<p>Presenting insights in executive-ready reports and presentations.</p>
+<h3>📈 Analytics</h3>
+<p>Data storytelling and executive-level business reporting.</p>
 </div>
 
 </div>
 
 </section>
 
-<!-- =========================
-PROJECTS
-========================= -->
+<!-- PROJECTS -->
 
 <section id="projects">
 
 <h2 class="section-title reveal">
-Projects & Reports
+Portfolio Reports
 </h2>
 
 <p class="section-sub reveal">
-Upload your dashboards and reports dynamically into your portfolio.
+Upload and showcase your dashboards professionally.
 </p>
 
-<div class="filter-buttons">
+<div class="filters">
 
 <button class="active">
 All
@@ -1110,22 +1497,18 @@ Excel
 SQL
 </button>
 
-<button>
-Healthcare
-</button>
-
 </div>
 
-<div class="upload-zone reveal">
+<div class="upload-box reveal">
 
 <input type="file" id="projectUpload" multiple accept="image/*">
 
 <h3>
-Upload Report Screenshots
+Upload Dashboard Reports
 </h3>
 
 <p>
-Drag & drop dashboard screenshots or click to upload.
+Drag and drop screenshots of your Power BI, Excel or analytics dashboards.
 </p>
 
 </div>
@@ -1140,9 +1523,7 @@ Drag & drop dashboard screenshots or click to upload.
 
 </section>
 
-<!-- =========================
-TESTIMONIALS
-========================= -->
+<!-- TESTIMONIALS -->
 
 <section id="testimonials">
 
@@ -1151,20 +1532,19 @@ Testimonials
 </h2>
 
 <p class="section-sub reveal">
-Professional feedback and recommendations.
+Professional recommendations and feedback.
 </p>
 
-<div class="testimonials-grid">
+<div class="testimonial-grid">
 
 <div class="testimonial reveal">
 
 <p>
-“Joshua consistently delivered high-quality dashboards that helped management make faster decisions.”
+“Joshua consistently delivered high-quality dashboards that improved reporting efficiency and executive visibility.”
 </p>
 
 <div class="testimonial-user">
-<h4>Zen Analytics Hub Ltd</h4>
-<span>Project Supervisor</span>
+<h4>Analytics Supervisor</h4>
 </div>
 
 </div>
@@ -1172,12 +1552,11 @@ Professional feedback and recommendations.
 <div class="testimonial reveal">
 
 <p>
-“Excellent reporting skills and strong attention to detail.”
+“Strong reporting skills with excellent attention to detail and business intelligence understanding.”
 </p>
 
 <div class="testimonial-user">
-<h4>Healthcare Client</h4>
-<span>Analytics Project</span>
+<h4>Project Client</h4>
 </div>
 
 </div>
@@ -1186,29 +1565,27 @@ Professional feedback and recommendations.
 
 </section>
 
-<!-- =========================
-CONTACT
-========================= -->
+<!-- CONTACT -->
 
 <section id="contact">
 
 <div class="contact-box reveal">
 
 <h2>
-Let's Work Together
+Let's Build Something Powerful
 </h2>
 
 <p>
-Available for remote opportunities, freelance projects, and analytics consulting.
+Available for analytics consulting, dashboard development and reporting projects.
 </p>
 
 <div class="contact-buttons">
 
-<a href="mailto:esoterikjoshua@gmail.com" class="btn btn-gold">
+<a href="mailto:yourmail@gmail.com" class="btn btn-gold">
 Email Me
 </a>
 
-<a href="https://www.linkedin.com" target="_blank" class="btn btn-dark">
+<a href="#" class="btn btn-dark">
 LinkedIn
 </a>
 
@@ -1218,9 +1595,7 @@ LinkedIn
 
 </section>
 
-<!-- =========================
-FOOTER
-========================= -->
+<!-- FOOTER -->
 
 <footer>
 
@@ -1229,20 +1604,33 @@ Idowu <span>Joshua</span>
 </div>
 
 <p>
-© 2026 · Professional Data Analyst Portfolio
+© 2026 Professional Data Analyst Portfolio
 </p>
 
 </footer>
 
-<!-- =========================
+<!-- =========================================
 SCRIPT
-========================= -->
+========================================= -->
 
 <script>
 
-/* =========================
+/* =========================================
+CURSOR GLOW
+========================================= */
+
+const glow = document.getElementById('cursorGlow');
+
+document.addEventListener('mousemove', e=>{
+
+glow.style.left = e.clientX + 'px';
+glow.style.top = e.clientY + 'px';
+
+});
+
+/* =========================================
 REVEAL
-========================= */
+========================================= */
 
 const reveals = document.querySelectorAll('.reveal');
 
@@ -1264,9 +1652,9 @@ el.classList.add('active');
 
 revealElements();
 
-/* =========================
-COUNTER
-========================= */
+/* =========================================
+COUNTERS
+========================================= */
 
 const counters = document.querySelectorAll('[data-count]');
 
@@ -1287,7 +1675,9 @@ counter.innerText = Math.ceil(current + increment);
 setTimeout(update,20);
 
 }else{
+
 counter.innerText = target;
+
 }
 
 };
@@ -1296,9 +1686,9 @@ update();
 
 });
 
-/* =========================
+/* =========================================
 PHOTO UPLOAD
-========================= */
+========================================= */
 
 const avatarUpload = document.getElementById('avatarUpload');
 const avatarImg = document.getElementById('avatarImg');
@@ -1340,15 +1730,16 @@ avatarPlaceholder.style.display = 'none';
 
 });
 
-/* =========================
+/* =========================================
 PROJECT UPLOAD
-========================= */
+========================================= */
 
 const uploadInput = document.getElementById('projectUpload');
-
 const projectsGrid = document.getElementById('projectsGrid');
 
-let savedProjects = JSON.parse(localStorage.getItem('portfolio-projects')) || [];
+let savedProjects = JSON.parse(
+localStorage.getItem('portfolio-projects')
+) || [];
 
 renderProjects();
 
@@ -1366,11 +1757,11 @@ const project = {
 
 image:e.target.result,
 
-title:'Analytics Dashboard',
+title:file.name.replace(/\.[^/.]+$/, ""),
 
-category:'Power BI',
+category:'Uploaded Report',
 
-desc:'Interactive business intelligence dashboard designed for executive decision making.',
+desc:'Professional analytics dashboard and business intelligence report.',
 
 tools:['Power BI','SQL','Excel']
 
@@ -1378,7 +1769,10 @@ tools:['Power BI','SQL','Excel']
 
 savedProjects.push(project);
 
-localStorage.setItem('portfolio-projects', JSON.stringify(savedProjects));
+localStorage.setItem(
+'portfolio-projects',
+JSON.stringify(savedProjects)
+);
 
 renderProjects();
 
@@ -1390,9 +1784,35 @@ reader.readAsDataURL(file);
 
 });
 
+/* =========================================
+RENDER PROJECTS
+========================================= */
+
 function renderProjects(){
 
 projectsGrid.innerHTML = '';
+
+if(savedProjects.length === 0){
+
+projectsGrid.innerHTML = `
+
+<div class="empty-state">
+
+<h3>
+No Reports Uploaded Yet
+</h3>
+
+<p>
+Upload your Power BI, Excel or analytics reports to showcase them professionally here.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
 
 savedProjects.forEach((project,index)=>{
 
@@ -1403,7 +1823,17 @@ card.className = 'project-card reveal active';
 card.innerHTML = `
 
 <div class="project-image">
+
 <img src="${project.image}">
+
+<div class="project-overlay">
+
+<div class="overlay-text">
+Business Intelligence
+</div>
+
+</div>
+
 </div>
 
 <div class="project-content">
@@ -1450,37 +1880,68 @@ projectsGrid.appendChild(card);
 
 }
 
+/* =========================================
+DELETE PROJECT
+========================================= */
+
 function deleteProject(index){
 
 savedProjects.splice(index,1);
 
-localStorage.setItem('portfolio-projects', JSON.stringify(savedProjects));
+localStorage.setItem(
+'portfolio-projects',
+JSON.stringify(savedProjects)
+);
 
 renderProjects();
 
 }
+
+/* =========================================
+PREVIEW PROJECT
+========================================= */
 
 function viewProject(src){
 
 const win = window.open('');
 
 win.document.write(`
+
 <style>
+
 body{
+
 margin:0;
+
 background:#000;
+
 display:flex;
+
 justify-content:center;
 align-items:center;
+
 height:100vh;
+
+overflow:hidden;
+
 }
+
 img{
+
 max-width:95%;
 max-height:95%;
+
+border-radius:16px;
+
+box-shadow:
+0 20px 80px rgba(0,0,0,.8);
+
 }
+
 </style>
 
 <img src="${src}">
+
 `);
 
 }
