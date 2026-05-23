@@ -1,584 +1,1332 @@
-/* ═══════════════════════ STORAGE ═══════════════════════ */
-const STORAGE_KEY = 'ij_portfolio_v3'; [cite: 97]
-const IMG_PREFIX = 'ij_img_v3_'; [cite: 98]
-const AVATAR_KEY = 'ij_avatar_v3'; [cite: 98]
-const COMMENTS_KEY = 'ij_comments_v3'; [cite: 98]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Idowu Joshua — Data Analyst Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,800;1,9..144,700;1,9..144,800&family=Cabinet+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{\r
+  --ink:#07080a;--ink2:#0d0f13;--ink3:#13161c;--ink4:#191d26;--ink5:#1f232e;\r
+  --rim:#252933;--rim2:#2e3444;\r
+  --gold:#c9a84c;--gold2:#dbbe78;--gold-glow:rgba(201,168,76,.07);--gold-tint:rgba(201,168,76,.11);\r
+  --em:#27b577;--em-dim:rgba(39,181,119,.15);\r
+  --paper:#ffffff;--paper-dim:#f5f6f8;--paper-rim:#e2e5e9;\r
+  --txt-pure:#ffffff;--txt-main:#e1e4ea;--txt-dim:#8e97a4;\r
+  --radius:12px;--radius-s:6px;--font-sans:'Cabinet Grotesk',sans-serif;--font-serif:'Fraunces',serif;--font-mono:'JetBrains Mono',monospace;\r
+}\r
+*{\r
+  box-sizing:border-box;margin:0;padding:0;\r
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;\r
+}\r
+body{\r
+  background-color:var(--ink);color:var(--txt-main);font-family:var(--font-sans);font-weight:400;\r
+  line-height:1.6;overflow-x:hidden;position:relative;\r
+}\r
+a{color:inherit;text-decoration:none}\r
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none}\r
+button{cursor:pointer}\r
+\r
+/* ═══════════════════════ NAVIGATION ═══════════════════════ */\r
+.nav-container{\r
+  position:fixed;top:0;left:0;width:100%;height:72px;display:flex;align-items:center;\r
+  justify-content:between;padding:0 5%;z-index:1000;transition:background-color .3s,border-bottom .3s;\r
+}\r
+.nav-container.scrolled{\r
+  background-color:rgba(7,8,10,.85);backdrop-filter:blur(12px);\r
+  border-bottom:1px solid var(--rim);\r
+}\r
+.nav-inner{\r
+  width:100%;max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;\r
+}\r
+.logo{\r
+  font-family:var(--font-serif);font-size:21px;font-weight:800;letter-spacing:-0.5px;\r
+  display:flex;align-items:center;gap:8px;\r
+}\r
+.logo span{color:var(--gold)}\r
+.nav-links{\r
+  display:flex;align-items:center;gap:36px;font-weight:500;font-size:14.5px;\r
+}\r
+.nav-links a{\r
+  position:relative;padding:6px 0;color:var(--txt-dim);transition:color .25s;\r
+}\r
+.nav-links a:hover{color:var(--txt-pure)}\r
+.nav-links a.nav-active{\r
+  color:var(--gold2);\r
+}\r
+.nav-links a.nav-active::after{\r
+  content:'';position:absolute;bottom:-2px;left:0;width:100%;height:1.5px;background-color:var(--gold);\r
+}\r
+.drawer-toggle{\r
+  display:none;flex-direction:column;gap:5px;width:24px;height:24px;justify-content:center;z-index:1100;\r
+}\r
+.drawer-toggle span{\r
+  display:block;width:100%;height:2px;background-color:var(--txt-main);transition:transform .3s,opacity .3s;\r
+}\r
+\r
+/* MOBILE DRAWER */\r
+.drawer{\r
+  position:fixed;top:0;right:0;width:280px;height:100vh;background-color:var(--ink2);\r
+  border-left:1px solid var(--rim);z-index:1050;padding:100px 40px 40px;display:flex;\r
+  flex-direction:column;gap:24px;transform:translateX(100%);transition:transform .4s cubic-bezier(0.1,0.9,0.2,1);\r
+}\r
+.drawer.open{transform:translateX(0)}\r
+.drawer a{\r
+  font-size:18px;font-weight:500;color:var(--txt-dim);padding:8px 0;border-bottom:1px solid rgba(255,255,255,.03);\r
+}\r
+.drawer a.nav-active{color:var(--gold2)}\r
+.drawer-overlay{\r
+  position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.5);\r
+  backdrop-filter:blur(4px);z-index:1040;display:none;opacity:0;transition:opacity .3s;\r
+}\r
+.drawer.open + .drawer-overlay{display:block;opacity:1}\r
+\r
+/* ═══════════════════════ STRUCTURE & PACING ═══════════════════════ */\r
+.page{\r
+  display:none;opacity:0;transition:opacity .4s ease;padding-top:72px;min-height:100vh;\r
+}\r
+.page.active{\r
+  display:block;opacity:1;\r
+}\r
+section{\r
+  padding:100px 5% 80px;\r
+}\r
+.section-inner{\r
+  width:100%;max-width:1200px;margin:0 auto;\r
+}\r
+.section-title{\r
+  font-family:var(--font-serif);font-size:42px;font-weight:700;line-height:1.15;\r
+  margin-bottom:16px;color:var(--txt-pure);letter-spacing:-0.5px;\r
+}\r
+.section-subtitle{\r
+  font-size:16px;color:var(--txt-dim);max-width:600px;margin-bottom:48px;font-weight:400;\r
+}\r
+\r
+/* ═══════════════════════ GLOBAL REVEAL ANIMATIONS ═══════════════════════ */\r
+.reveal{\r
+  opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(0.15,0.85,0.3,1),transform .8s cubic-bezier(0.15,0.85,0.3,1);\r
+}\r
+.reveal.vis{opacity:1;transform:none}\r
+.delay-1{transition-delay:.15s}\r
+.delay-2{transition-delay:.3s}\r
+\r
+/* ═══════════════════════ HOME PAGE ═══════════════════════ */\r
+.hero-sec{padding:140px 5% 100px;position:relative;overflow:hidden}\r
+.hero-sec::before{\r
+  content:'';position:absolute;top:-10%;right:-10%;width:50vw;height:50vw;\r
+  background:radial-gradient(circle, rgba(201,168,76,.04) 0%, rgba(0,0,0,0) 70%);z-index:-1;\r
+}\r
+.hero-grid{\r
+  display:grid;grid-template-columns:1.2fr 0.8fr;gap:64px;align-items:center;\r
+}\r
+.hero-tag{\r
+  display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);\r
+  font-size:12px;text-transform:uppercase;color:var(--gold2);background:var(--gold-tint);\r
+  padding:6px 14px;border-radius:100px;margin-bottom:24px;border:1px solid rgba(201,168,76,.15);\r
+}\r
+.hero-tag span{width:6px;height:6px;background-color:var(--gold);border-radius:50%;display:inline-block}\r
+.hero-title{\r
+  font-family:var(--font-serif);font-size:64px;font-weight:700;line-height:1.08;\r
+  color:var(--txt-pure);letter-spacing:-1.5px;margin-bottom:24px;\r
+}\r
+.hero-title em{font-style:italic;font-weight:300;font-family:var(--font-serif);color:var(--txt-dim)}\r
+.hero-desc{\r
+  font-size:18px;color:var(--txt-dim);max-width:540px;margin-bottom:40px;line-height:1.65;\r
+}\r
+.hero-ctas{\r
+  display:flex;align-items:center;gap:20px;\r
+}\r
+.btn-primary{\r
+  background-color:var(--gold);color:var(--ink);font-weight:600;font-size:15px;\r
+  padding:14px 28px;border-radius:var(--radius-s);transition:background-color .2s,transform .2s;\r
+  display:inline-flex;align-items:center;gap:8px;\r
+}\r
+.btn-primary:hover{background-color:var(--gold2);transform:translateY(-1px)}\r
+.btn-secondary{\r
+  border:1px solid var(--rim);color:var(--txt-main);font-weight:500;font-size:15px;\r
+  padding:14px 28px;border-radius:var(--radius-s);transition:background-color .2s,border-color .2s;\r
+  display:inline-flex;align-items:center;gap:8px;\r
+}\r
+.btn-secondary:hover{background-color:rgba(255,255,255,.03);border-color:var(--txt-dim)}\r
+\r
+/* PROFILE COMPONENT */\r
+.profile-box{position:relative;display:flex;justify-content:center}\r
+.avatar-frame{\r
+  position:relative;width:320px;height:380px;border-radius:24px;overflow:hidden;\r
+  background-color:var(--ink3);border:1px solid var(--rim);\r
+  box-shadow:0 32px 64px -16px rgba(0,0,0,.5);transition:border-color .3s;\r
+}\r
+.avatar-frame:hover{border-color:var(--rim2)}\r
+.avatar-frame img{\r
+  width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s;\r
+}\r
+.avatar-frame img.show{opacity:1}\r
+.avatar-init{\r
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;\r
+  justify-content:center;color:var(--txt-dim);gap:12px;padding:24px;text-align:center;\r
+}\r
+.avatar-init svg{color:var(--rim2);transition:color .3s}\r
+.avatar-frame:hover .avatar-init svg{color:var(--txt-dim)}\r
+.avatar-label{\r
+  font-size:13px;font-weight:500;background:rgba(255,255,255,.04);padding:6px 14px;\r
+  border-radius:100px;border:1px solid rgba(255,255,255,.03);cursor:pointer;transition:all .2s;\r
+}\r
+.avatar-label:hover{background:rgba(255,255,255,.08);color:var(--txt-pure)}\r
+\r
+/* METRICS STRIP */\r
+.stats-bar{\r
+  border-top:1px solid var(--rim);border-bottom:1px solid var(--rim);padding:40px 0;background:rgba(255,255,255,.01);\r
+}\r
+.stats-grid{\r
+  display:grid;grid-template-columns:repeat(3,1fr);gap:32px;text-align:left;\r
+}\r
+.stat-item{padding-left:24px;border-left:1px solid var(--rim)}\r
+.stat-item:first-child{border-left:none;padding-left:0}\r
+.stat-num{\r
+  font-family:var(--font-mono);font-size:36px;font-weight:500;color:var(--txt-pure);line-height:1;\r
+  margin-bottom:8px;display:flex;align-items:baseline;gap:2px;\r
+}\r
+.stat-num span{color:var(--gold);font-size:24px}\r
+.stat-lbl{font-size:14px;color:var(--txt-dim);font-weight:400;text-transform:uppercase;letter-spacing:0.5px}\r
+\r
+/* HOME LATEST ENTRIES */\r
+.home-rp-grid{display:flex;flex-direction:column;gap:20px;margin-top:32px}\r
+.home-rp-card{\r
+  display:grid;grid-template-columns:180px 1fr;background:var(--ink2);border:1px solid var(--rim);\r
+  border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:transform .3s,border-color .3s,box-shadow .3s;\r
+}\r
+.home-rp-card:hover{\r
+  transform:translateY(-2px);border-color:var(--rim2);box-shadow:0 12px 24px -8px rgba(0,0,0,.4);\r
+}\r
+.home-rp-img{\r
+  width:100%;height:130px;position:relative;background:var(--ink3);overflow:hidden;\r
+}\r
+.home-rp-img img{width:100%;height:100%;object-fit:cover}\r
+.home-rp-img-overlay{\r
+  position:absolute;inset:0;background:linear-gradient(90deg, rgba(7,8,10,0) 60%, var(--ink2) 100%)\r
+}\r
+.home-rp-badge{\r
+  position:absolute;top:12px;left:12px;font-size:9px;padding:3px 8px;z-index:2;\r
+}\r
+.home-rp-info{\r
+  padding:24px;display:flex;flex-content:space-between;align-items:center;justify-content:space-between;gap:24px;\r
+}\r
+.home-rp-title{\r
+  font-family:var(--font-serif);font-size:20px;font-weight:700;color:var(--txt-pure);margin-bottom:4px;\r
+}\r
+.home-rp-meta{\r
+  font-size:13px;color:var(--txt-dim);\r
+}\r
+.home-rp-cta{\r
+  font-size:13px;font-weight:600;color:var(--gold2);display:flex;align-items:center;gap:6px;white-space:nowrap;\r
+  transition:gap .2s;\r
+}\r
+.home-rp-card:hover .home-rp-cta{gap:10px}\r
+\r
+/* ═══════════════════════ REPORTS GALLERY PAGE ═══════════════════════ */\r
+.gallery-layout{\r
+  display:grid;grid-template-columns:280px 1fr;gap:48px;align-items:start;\r
+}\r
+\r
+/* LEFT CONTROL PANEL */\r
+.control-panel{\r
+  background-color:var(--ink2);border:1px solid var(--rim);border-radius:var(--radius);\r
+  padding:24px;position:sticky;top:100px;display:flex;flex-direction:column;gap:28px;\r
+}\r
+.panel-sec-title{\r
+  font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--txt-dim);\r
+  font-weight:700;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.03);\r
+}\r
+.upload-box{\r
+  border:1.5px dashed var(--rim);border-radius:var(--radius-s);padding:28px 16px;text-align:center;\r
+  cursor:pointer;transition:all .25s ease;background:rgba(255,255,255,.005);\r
+}\r
+.upload-box:hover, .upload-box.hovered{\r
+  border-color:var(--gold);background:var(--gold-glow);\r
+}\r
+.upload-box svg{color:var(--txt-dim);margin-bottom:12px;transition:color .25s}\r
+.upload-box:hover svg{color:var(--gold2)}\r
+.upload-box h4{font-size:14px;font-weight:600;color:var(--txt-pure);margin-bottom:4px}\r
+.upload-box p{font-size:12px;color:var(--txt-dim)}\r
+.upload-count-lbl{font-size:13px;color:var(--txt-dim);text-align:center;margin-top:-12px;font-family:var(--font-mono)}\r
+\r
+/* STRIP MINI PREVIEWS */\r
+.u-strip{display:flex;flex-direction:column;gap:10px;max-height:240px;overflow-y:auto;padding-right:4px}\r
+.u-strip::-webkit-scrollbar{width:4px}\r
+.u-strip::-webkit-scrollbar-thumb{background:var(--rim);border-radius:2px}\r
+.s-thumb{\r
+  display:grid;grid-template-columns:40px 1fr 24px;gap:12px;align-items:center;\r
+  padding:8px;background:var(--ink3);border:1px solid var(--rim);border-radius:var(--radius-s);\r
+  font-size:12px;position:relative;cursor:pointer;transition:border-color .2s;\r
+}\r
+.s-thumb:hover{border-color:var(--rim2)}\r
+.s-thumb img{width:40px;height:40px;object-fit:cover;border-radius:4px;background:var(--ink4)}\r
+.s-label{\r
+  font-weight:500;color:var(--txt-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\r
+}\r
+.s-del{\r
+  width:20px;height:20px;display:flex;align-items:center;justify-content:center;\r
+  color:var(--txt-dim);border-radius:50%;font-size:10px;transition:all .2s;\r
+}\r
+.s-del:hover{background:rgba(255,255,255,.05);color:var(--txt-pure)}\r
+\r
+/* RIGHT MAIN GRID */\r
+.report-grid{\r
+  display:grid;grid-template-columns:repeat(auto-fill, minmax(340px, 1fr));gap:32px;\r
+}\r
+.rp-card{\r
+  background-color:var(--ink2);border:1px solid var(--rim);border-radius:var(--radius);\r
+  overflow:hidden;display:flex;flex-direction:column;position:relative;\r
+  box-shadow:0 16px 32px -12px rgba(0,0,0,.3);\r
+}\r
+.rp-img{\r
+  position:relative;width:100%;height:210px;background-color:var(--ink3);overflow:hidden;\r
+}\r
+.rp-img img{\r
+  width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(0.15,0.85,0.3,1);\r
+}\r
+.rp-card:hover .rp-img img{\r
+  transform:scale(1.03);\r
+}\r
+.rp-img-overlay{\r
+  position:absolute;inset:0;background:linear-gradient(0deg, rgba(7,8,10,.4) 0%, rgba(7,8,10,0) 50%);\r
+}\r
+.tag{\r
+  display:inline-block;padding:4px 10px;font-size:10.5px;font-weight:600;\r
+  border-radius:4px;text-transform:uppercase;letter-spacing:0.3px;\r
+}\r
+.t-gold{background:var(--gold-tint);color:var(--gold2);border:1px solid rgba(201,168,76,.15)}\r
+.t-em{background:var(--em-dim);color:var(--em);border:1px solid rgba(39,181,119,.15)}\r
+.t-dim{background:rgba(255,255,255,.03);color:var(--txt-dim);border:1px solid rgba(255,255,255,.03)}\r
+.rp-badge{position:absolute;top:16px;left:16px;z-index:3}\r
+.rp-expand{\r
+  position:absolute;bottom:16px;right:16px;width:36px;height:36px;border-radius:50%;\r
+  background:rgba(7,8,10,.6);backdrop-filter:blur(6px);color:var(--txt-pure);display:flex;\r
+  align-items:center;justify-content:center;opacity:0;transform:translateY(6px);\r
+  transition:all .25s ease;z-index:3;border:1px solid rgba(255,255,255,.05);\r
+}\r
+.rp-card:hover .rp-expand{opacity:1;transform:none}\r
+.rp-expand:hover{background:var(--ink);color:var(--gold2);transform:scale(1.05)}\r
+\r
+.rp-body{\r
+  padding:24px;flex-grow:1;display:flex;flex-content:space-between;flex-direction:column;\r
+}\r
+.rp-meta{\r
+  display:flex;align-items:center;justify-content:space-between;font-size:12px;\r
+  font-family:var(--font-mono);color:var(--txt-dim);margin-bottom:10px;\r
+}\r
+.rp-type{text-transform:uppercase;color:var(--gold2);font-weight:500}\r
+.rp-title{\r
+  font-family:var(--font-serif);font-size:22px;font-weight:700;color:var(--txt-pure);\r
+  line-height:1.25;margin-bottom:12px;letter-spacing:-0.2px;\r
+}\r
+.rp-desc{\r
+  font-size:14px;color:var(--txt-dim);line-height:1.55;margin-bottom:20px;\r
+}\r
+.rp-details-btn{\r
+  width:100%;padding:10px 14px;background:rgba(255,255,255,.02);border:1px solid var(--rim);\r
+  border-radius:var(--radius-s);font-size:13px;font-weight:500;color:var(--txt-main);\r
+  display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;margin-top:auto;\r
+}\r
+.rp-details-btn:hover{background:rgba(255,255,255,.05);border-color:var(--rim2);color:var(--txt-pure)}\r
+\r
+/* COMMENTS SECTION SYSTEM */\r
+.rp-comments-section{\r
+  border-top:1px solid rgba(255,255,255,.02);background:rgba(0,0,0,.15);\r
+}\r
+.cs-toggle{\r
+  width:100%;padding:12px 24px;display:flex;align-items:center;gap:6px;\r
+  font-size:12.5px;color:var(--txt-dim);font-weight:500;text-align:left;\r
+}\r
+.cs-toggle svg{transition:transform .2s;color:var(--rim2)}\r
+.cs-toggle.open svg{transform:rotate(180deg);color:var(--txt-dim)}\r
+.cs-toggle .ccount{\r
+  background:var(--rim);color:var(--txt-main);font-size:10px;font-family:var(--font-mono);\r
+  padding:1px 6px;border-radius:100px;margin-left:auto;\r
+}\r
+.cs-body{\r
+  display:none;padding:0 24px 20px;flex-direction:column;gap:14px;\r
+}\r
+.cs-body.open{display:flex}\r
+.comments-list{\r
+  display:flex;flex-direction:column;gap:10px;max-height:160px;overflow-y:auto;padding-right:2px;\r
+}\r
+.comments-list::-webkit-scrollbar{width:3px}\r
+.comments-list::-webkit-scrollbar-thumb{background:var(--rim)}\r
+.comments-empty{\r
+  font-size:12px;color:var(--txt-dim);font-style:italic;text-align:center;padding:12px 0;\r
+}\r
+.comment-item{\r
+  background:var(--ink3);border:1px solid var(--rim);padding:10px 12px;border-radius:6px;\r
+}\r
+.ci-head{\r
+  display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:4px;\r
+}\r
+.ci-name{font-weight:600;color:var(--gold2)}\r
+.ci-time{color:var(--txt-dim);font-family:var(--font-mono)}\r
+.ci-del{\r
+  margin-left:8px;color:var(--rim2);font-size:9px;transition:color .2s;\r
+}\r
+.comment-item:hover .ci-del{color:var(--txt-dim)}\r
+.ci-del:hover{color:var(--em)!important}\r
+.ci-txt{font-size:12.5px;color:var(--txt-main);line-height:1.4}\r
+.comment-form{\r
+  display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:4px;\r
+}\r
+.comment-input{\r
+  background:var(--ink3);border:1px solid var(--rim);border-radius:6px;padding:8px 12px;\r
+  font-size:12.5px;color:var(--txt-pure);transition:border-color .2s;\r
+}\r
+.comment-input:focus{outline:none;border-color:var(--rim2)}\r
+.comment-submit{\r
+  background:var(--rim);padding:0 14px;border-radius:6px;font-size:12px;font-weight:500;\r
+  color:var(--txt-main);transition:all .2s;\r
+}\r
+.comment-submit:hover{background:var(--rim2);color:var(--txt-pure)}\r
+\r
+.rp-footer{\r
+  padding:16px 24px;border-top:1px solid var(--rim);display:flex;\r
+  align-items:center;justify-content:space-between;background-color:rgba(255,255,255,.005);\r
+}\r
+.rp-tools{\r
+  display:flex;gap:6px;flex-wrap:wrap;max-width:70%;\r
+}\r
+.rp-del{\r
+  font-size:12px;color:var(--txt-dim);font-weight:500;transition:color .2s;\r
+}\r
+.rp-del:hover{color:var(--gold2)}\r
+\r
+/* EMPTY STATE CONTAINER */\r
+.empty-state{\r
+  grid-column:1/-1;display:none;flex-direction:column;align-items:center;justify-content:center;\r
+  padding:80px 40px;text-align:center;background:var(--ink2);border:1px dashed var(--rim);border-radius:var(--radius);\r
+}\r
+.empty-state svg{color:var(--rim2);margin-bottom:20px}\r
+.empty-state h3{font-family:var(--font-serif);font-size:24px;color:var(--txt-pure);margin-bottom:8px}\r
+.empty-state p{font-size:14px;color:var(--txt-dim);max-width:360px;margin-bottom:24px}\r
+\r
+/* MOBILE ACTION TRIGGER BUTTON */\r
+.m-upload-action{\r
+  display:none;position:fixed;bottom:24px;right:24px;z-index:900;\r
+}\r
+.m-action-btn{\r
+  width:56px;height:56px;border-radius:50%;background:var(--gold);color:var(--ink);\r
+  display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(201,168,76,.4);\r
+}\r
+\r
+/* ═══════════════════════ MODALS COMPONENT SYSTEM ═══════════════════════ */\r
+.modal-bg{\r
+  position:fixed;inset:0;background:rgba(7,8,10,.75);backdrop-filter:blur(8px);\r
+  z-index:2000;display:none;align-items:center;justify-content:center;padding:24px;\r
+  opacity:0;transition:opacity .3s ease;\r
+}\r
+.modal-bg.open{\r
+  display:flex;opacity:1;\r
+}\r
+.modal-wrapper{\r
+  background:var(--ink2);border:1px solid var(--rim);width:100%;max-width:680px;\r
+  border-radius:24px;overflow:hidden;box-shadow:0 40px 80px -24px rgba(0,0,0,.6);\r
+  transform:translateY(20px);transition:transform .3s ease;\r
+}\r
+.modal-bg.open .modal-wrapper{\r
+  transform:none;\r
+}\r
+.m-header{\r
+  padding:24px 32px;border-bottom:1px solid var(--rim);display:flex;align-items:center;justify-content:space-between;\r
+}\r
+.m-header h3{\r
+  font-family:var(--font-serif);font-size:24px;color:var(--txt-pure);\r
+}\r
+.m-body{\r
+  padding:32px;display:grid;grid-template-columns:200px 1fr;gap:32px;max-height:70vh;overflow-y:auto;\r
+}\r
+.m-body::-webkit-scrollbar{width:6px}\r
+.m-body::-webkit-scrollbar-thumb{background:var(--rim);border-radius:3px}\r
+.m-form{display:flex;flex-direction:column;gap:18px}\r
+.form-grp{display:flex;flex-direction:column;gap:6px}\r
+.form-grp label{\r
+  font-size:12px;text-transform:uppercase;letter-spacing:0.5px;color:var(--txt-dim);font-weight:600;\r
+}\r
+.form-grp input, .form-grp select, .form-grp textarea{\r
+  background:var(--ink3);border:1px solid var(--rim);border-radius:var(--radius-s);\r
+  padding:10px 14px;font-size:14px;color:var(--txt-pure);transition:border-color .2s;\r
+}\r
+.form-grp input:focus, .form-grp select:focus, .form-grp textarea:focus{\r
+  outline:none;border-color:var(--rim2);\r
+}\r
+.m-footer{\r
+  padding:20px 32px;border-top:1px solid var(--rim);display:flex;align-items:center;justify-content:space-between;\r
+  background:rgba(255,255,255,.005);\r
+}\r
+\r
+/* DETAIL VIEW SPECIFICS */\r
+.dm-grid{grid-template-columns:1fr 1fr!important;max-width:840px!important}\r
+.dm-img-box{\r
+  width:100%;height:100%;min-height:280px;border-radius:var(--radius-s);overflow:hidden;background:var(--ink3);border:1px solid var(--rim);\r
+  position:relative;\r
+}\r
+.dm-img-box img{width:100%;height:100%;object-fit:cover}\r
+.dm-badge{align-self:start;margin-bottom:8px}\r
+.dm-title-row{margin-bottom:16px}\r
+.dm-title-row h2{font-family:var(--font-serif);font-size:32px;color:var(--txt-pure);line-height:1.15;margin-bottom:4px}\r
+.dm-meta-row{font-size:13px;font-family:var(--font-mono);color:var(--txt-dim);display:flex;gap:16px;margin-bottom:20px}\r
+.dm-meta-row span strong{color:var(--txt-main);font-weight:400}\r
+.dm-section-lbl{\r
+  font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--txt-dim);font-weight:700;\r
+  margin-bottom:6px;margin-top:20px;\r
+}\r
+.dm-desc-txt{font-size:14.5px;color:var(--txt-main);line-height:1.6}\r
+.dm-hl-box{display:flex;flex-direction:column;gap:8px;margin-top:8px}\r
+.dm-hl-item{display:flex;align-items:start;gap:10px;font-size:14px;color:var(--txt-main)}\r
+.dm-hl-dot{width:5px;height:5px;background:var(--gold);border-radius:50%;margin-top:7px;flex-shrink:0}\r
+.dm-tools-box{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}\r
+\r
+/* LIGHTBOX OVERLAY */\r
+.lightbox-bg{\r
+  position:fixed;inset:0;background:rgba(4,5,6,.95);z-index:3000;display:none;\r
+  align-items:center;justify-content:center;padding:40px;opacity:0;transition:opacity .3s;\r
+}\r
+.lightbox-bg.open{display:flex;opacity:1}\r
+.lightbox-bg img{\r
+  max-width:92vw;max-height:88vh;object-fit:contain;border-radius:4px;\r
+  box-shadow:0 24px 48px rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.05);\r
+}\r
+.lightbox-close{\r
+  position:absolute;top:24px;right:24px;width:40px;height:40px;color:var(--txt-dim);\r
+  font-size:20px;display:flex;align-items:center;justify-content:center;transition:color .2s;\r
+}\r
+.lightbox-close:hover{color:var(--txt-pure)}\r
+\r
+/* ═══════════════════════ RESPONSIVE BREAKPOINTS ═══════════════════════ */\r
+@media(max-width:1024px){\r
+  .gallery-layout{grid-template-columns:1fr;gap:40px}\r
+  .control-panel{position:static;width:100%}\r
+  .u-strip{flex-direction:row;max-height:none;overflow-x:auto;overflow-y:hidden;padding-bottom:6px}\r
+  .s-thumb{grid-template-columns:36px 120px 20px;flex-shrink:0}\r
+}\r
+@media(max-width:880px){\r
+  .hero-grid{grid-template-columns:1fr;gap:48px;text-align:center}\r
+  .hero-tag{justify-content:center}\r
+  .hero-desc{margin:0 auto 40px}\r
+  .hero-ctas{justify-content:center}\r
+  .profile-box{order:-1}\r
+  .avatar-frame{width:280px;height:340px}\r
+  .dm-grid{grid-template-columns:1fr!important}\r
+  .dm-img-box{height:220px;min-height:0}\r
+}\r
+@media(max-width:720px){\r
+  .nav-links{display:none}\r
+  .drawer-toggle{display:flex}\r
+  .section-title{font-size:32px}\r
+  .hero-title{font-size:44px}\r
+  .stats-grid{grid-template-columns:1fr;gap:20px}\r
+  .stat-item{border-left:none;border-bottom:1px solid var(--rim);padding-left:0;padding-bottom:16px}\r
+  .stat-item:last-child{border-bottom:none;padding-bottom:0}\r
+  .control-panel .upload-box{display:none}\r
+  .control-panel{padding:16px}\r
+  .m-upload-action{display:block}\r
+  .home-rp-card{grid-template-columns:1fr}\r
+  .home-rp-img{height:160px}\r
+  .home-rp-img-overlay{background:linear-gradient(0deg, rgba(7,8,10,0.6) 0%, rgba(0,0,0,0) 100%)}\r
+  .home-rp-info{flex-direction:column;align-items:start;padding:20px;gap:16px}\r
+  .m-body{grid-template-columns:1fr;padding:20px}\r
+  .m-preview-frame{height:160px!important}\r
+}\r
+</style>
+</head>
+<body>
 
-function saveProjects(arr){
-  try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr.map(p=>({...p,src:undefined})))); [cite: 98]
-    arr.forEach(p=>{
-      if(p.src&&p.src.startsWith('data:image')) localStorage.setItem(IMG_PREFIX+p.id,p.src); [cite: 98]
-    });
-  }catch(e){console.warn('Storage write failed',e)} [cite: 98]
-}
-
-function loadProjects(){
-  try{
-    const raw=localStorage.getItem(STORAGE_KEY); [cite: 99]
-    if(!raw) return []; [cite: 99]
-    return JSON.parse(raw).map(p=>({...p,src:localStorage.getItem(IMG_PREFIX+p.id)||''})); [cite: 99]
-  }catch(e){return []} [cite: 100]
-}
-
-function deleteProjectImage(id){ [cite: 100]
-  try{ localStorage.removeItem(IMG_PREFIX+id); }catch(e){} [cite: 100]
-}
-
-function loadComments(){
-  try{
-    const raw=localStorage.getItem(COMMENTS_KEY);
-    return raw ? JSON.parse(raw) : {};
-  }catch(e){return {}}
-}
-
-function saveComments(obj){
-  try{ localStorage.setItem(COMMENTS_KEY, JSON.stringify(obj)); }catch(e){}
-}
-
-let projects = loadProjects(); [cite: 100]
-let comments = loadComments();
-
-/* ═══════════════════════ MULTI-WINDOW & DEVICE SYNC ═══════════════════════ */
-// Listens for localStorage variations triggered in other mobile viewports or parallel windows
-window.addEventListener('storage', (e) => {
-  if (e.key === STORAGE_KEY) {
-    projects = loadProjects();
-    renderAll();
-  }
-  if (e.key === COMMENTS_KEY) {
-    comments = loadComments();
-    projects.forEach(p => {
-      renderComments(p.id);
-    });
-  }
-  if (e.key === AVATAR_KEY) {
-    loadAvatar();
-  }
-});
-
-/* ═══════════════════════ NAVIGATION & RENDERING ═══════════════════════ */
-function showPage(pageId){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const activePage=document.getElementById(pageId);
-  if(activePage) activePage.classList.add('active');
-  
-  document.querySelectorAll('.nav-links a').forEach(a=>{
-    a.classList.toggle('nav-active', a.getAttribute('onclick')?.includes(pageId));
-  });
-  
-  toggleDrawer(false);
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function toggleDrawer(force){
-  const d=document.getElementById('drawer');
-  if(!d) return;
-  if(typeof force==='boolean') d.classList.toggle('open', force);
-  else d.classList.toggle('open');
-}
-
-function initNavScroll(){
-  const nav=document.getElementById('nav');
-  window.addEventListener('scroll',()=>{
-    if(window.scrollY>20) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  });
-}
-
-function escHtml(str){
-  if(!str) return '';
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-/* ═══════════════════════ UPLOAD CORE MANAGEMENT ═══════════════════════ */
-const tagClasses={'Sales Analytics':'t-gold','Health Analytics':'t-em','Business Intelligence':'t-gold','Dashboard':'t-gold','Data Report':'t-dim','Other':'t-dim'}; [cite: 127]
-let pendingFiles=[],pendingIdx=0; [cite: 127]
-
-function getStrip(){return document.getElementById('uploadedStrip')} [cite: 128]
-function getGrid(){return document.getElementById('reportGrid')} [cite: 128]
-function getEmpty(){return document.getElementById('emptyState')} [cite: 128]
-
-function checkEmpty(){
-  const cards=getGrid().querySelectorAll('.rp-card'); [cite: 128]
-  getEmpty().style.display=cards.length===0?'flex':'none'; [cite: 128]
-  updateCount(); [cite: 128]
-  const stat=document.getElementById('home-stat-projects'); [cite: 128]
-  if(stat) stat.textContent=projects.length; [cite: 128]
-}
-
-function updateCount(){
-  const el=document.getElementById('uploadCount'); [cite: 129]
-  const n=projects.length; [cite: 129]
-  if(el) el.textContent=`${n} image${n!==1?'s':''} uploaded`; [cite: 129]
-}
-
-function processFiles(files){
-  const imgs=Array.from(files).filter(f=>f.type.startsWith('image/')); [cite: 130]
-  if(!imgs.length) return; [cite: 130]
-  pendingFiles=imgs;pendingIdx=0; [cite: 130]
-  openNextModal(); [cite: 130]
-}
-
-function initUploadListeners(){
-  const dropZone=document.getElementById('dropZone'); [cite: 131]
-  const fileInput=document.getElementById('fileInput'); [cite: 131]
-  
-  if(dropZone){
-    dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('hovered')}); [cite: 131]
-    dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('hovered')); [cite: 131]
-    dropZone.addEventListener('drop',e=>{
-      e.preventDefault();dropZone.classList.remove('hovered'); [cite: 131]
-      processFiles(e.dataTransfer.files); [cite: 131]
-    });
-  }
-  
-  if(fileInput){
-    fileInput.addEventListener('change',function(){
-      if(this.files && this.files.length) processFiles(this.files); [cite: 132]
-      this.value=''; [cite: 132]
-    });
-  }
-  
-  const mobileBtn=document.getElementById('mobileUploadBtn'); [cite: 133]
-  const mobileInput=document.getElementById('fileInputMobile'); [cite: 133]
-  
-  if(mobileBtn && mobileInput){
-    mobileBtn.addEventListener('click',function(e){
-      e.preventDefault(); e.stopPropagation(); [cite: 134]
-      mobileInput.click(); [cite: 134]
-    });
-    mobileInput.addEventListener('change',function(){
-      if(this.files && this.files.length){ processFiles(this.files); } [cite: 135]
-      this.value=''; [cite: 135]
-    });
-  }
-  
-  const esBtn = document.getElementById('emptyStateBtn');
-  if(esBtn){
-    esBtn.addEventListener('click',function(){
-      if(window.innerWidth<=720 && mobileInput){ mobileInput.click(); } [cite: 136]
-      else if(fileInput) { fileInput.click(); } [cite: 136]
-    });
-  }
-}
-
-function openNextModal(){
-  if(pendingIdx Pall>=pendingFiles.length) return; [cite: 137]
-  const file=pendingFiles[pendingIdx++]; [cite: 137]
-  const r=new FileReader(); [cite: 137]
-  r.onload=e=>{
-    const src=e.target.result; [cite: 137]
-    document.getElementById('mPreview').innerHTML=`<img src="${src}" style="width:100%;height:100%;object-fit:cover"/>`; [cite: 137]
-    document.getElementById('mTitle').value=file.name.replace(/\.[^/.]+$/,'').replace(/[-_]/g,' '); [cite: 137]
-    document.getElementById('mDesc').value=''; [cite: 137]
-    document.getElementById('mTools').value='Power BI, Excel'; [cite: 138]
-    document.getElementById('mYear').value=new Date().getFullYear(); [cite: 138]
-    document.getElementById('mHl1').value=''; [cite: 138]
-    document.getElementById('mHl2').value=''; [cite: 138]
-    document.getElementById('mHl3').value='';
-    document.getElementById('uploadModalBg').classList.add('open');
-  };
-  r.readAsDataURL(file);
-}
-
-/* ═══════════════════════ CARD CREATION & PREVIEW ═══════════════════════ */
-function createCard(src, project, batchMode=false, existingProject=false){
-  const {id,title,desc,category,hl1,hl2,hl3,tools,year}=project;
-  
-  const thumb=document.createElement('div');
-  thumb.className='s-thumb'; thumb.id=`t-${id}`;
-  thumb.innerHTML=`<img src="${src}" alt=""/><div class="s-label">${escHtml(title)}</div><button class="s-del" title="Delete entry">✕</button>`;
-  thumb.querySelector('img').onclick=()=>showPage('reports');
-  thumb.querySelector('.s-del').onclick=(e)=>{
-    e.stopPropagation();
-    removeCard(id,thumb);
-  };
-  
-  const card=document.createElement('div');
-  card.className='rp-card'; card.id=`c-${id}`;
-  
-  const badg=category||'Other';
-  const cls=tagClasses[badg]||'t-dim'; [cite: 127]
-  const shortDesc=desc && desc.length>110 ? desc.substring(0,107)+'...' : (desc||'');
-  
-  let toolTagsStr='';
-  if(tools){
-    toolTagsStr=tools.split(',').map(t=>t.trim()).filter(Boolean)
-      .map(t=>`<span class="tag t-dim" style="font-size:8.5px;padding:2px 7px">${escHtml(t)}</span>`).join('');
-  }
-  
-  card.innerHTML=`
-    <div class="rp-img">
-      <img src="${src}" alt="${escHtml(title)}"/>
-      <div class="rp-img-overlay"></div>
-      <span class="tag ${cls} rp-badge">${escHtml(badg)}</span>
-      <button class="rp-expand" title="Open lightbox">🔍</button>
+  <nav class="nav-container" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="logo" onclick="showPage('home')">JOSHUA<span>.</span></a>
+      <div class="nav-links">
+        <a href="#home" class="nav-active" onclick="showPage('home')">Home</a>
+        <a href="#reports" onclick="showPage('reports')">Reports Hub</a>
+      </div>
+      <button class="drawer-toggle" onclick="toggleDrawer()" aria-label="Toggle Navigation Menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <div class="rp-body">
-      <div class="rp-meta"><span class="rp-type">${escHtml(badg)}</span><span class="rp-yr">${escHtml(year||'')}</span></div>
-      <h3 class="rp-title">${escHtml(title)}</h3>
-      <p class="rp-desc">${escHtml(shortDesc)}</p> [cite: 160]
-      <button class="rp-details-btn" onclick="openDetail('${id}')">
-        View Report Details
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-      </button> [cite: 160]
-    </div>
-    <div class="rp-comments-section">
-      <button class="cs-toggle" onclick="toggleComments(this,'${id}')">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-        Comments <span class="ccount" id="cc-${id}">0</span>
-      </button> [cite: 160]
-      <div class="cs-body" id="cb-${id}">
-        <div class="comments-list" id="cl-${id}"><div class="comments-empty">No comments yet.</div></div> [cite: 160]
-        <div class="comment-form">
-          <input class="comment-input" id="ci-${id}" placeholder="Add a comment…" onkeydown="if(event.key==='Enter')postComment('${id}')"/> [cite: 161]
-          <button class="comment-submit" onclick="postComment('${id}')">Post</button> [cite: 161]
+  </nav>
+
+  <div class="drawer" id="drawer">
+    <a href="#home" class="nav-active" onclick="showPage('home')">Home</a>
+    <a href="#reports" onclick="showPage('reports')">Reports Hub</a>
+  </div>
+  <div class="drawer-overlay" onclick="toggleDrawer(false)"></div>
+
+  <div class="page active" id="home">
+    <section class="hero-sec">
+      <div class="section-inner hero-grid">
+        <div class="reveal">
+          <div class="hero-tag"><span></span>Data Architect Portfolio</div>
+          <h1 class="hero-title">Transforming complex information into <em>interactive clarity</em></h1>
+          <p class="hero-desc">Hi, I'm Idowu Joshua. I specialize in designing and engineering high-impact executive intelligence reports, advanced custom visual workflows, and reliable end-to-end telemetry models.</p>
+          <div class="hero-ctas">
+            <button class="btn-primary" onclick="showPage('reports')">
+              Explore Reports Hub
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="profile-box reveal delay-1">
+          <div class="avatar-frame">
+            <div class="avatar-init" id="avInit">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <label class="avatar-label" for="avatarInput">Upload Portfolio Avatar</label>
+              <input type="file" id="avatarInput" accept="image/*" style="display:none"/>
+            </div>
+            <img src="" id="avatarImg" alt="Profile avatar picture"/>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="stats-bar reveal">
+      <div class="section-inner stats-grid">
+        <div class="stat-item">
+          <div class="stat-num" id="home-stat-projects">0</div>
+          <div class="stat-lbl">Active Analytical Assets</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">99.4<span>%</span></div>
+          <div class="stat-lbl">Pipeline Sync SLA Integrity</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">24<span>/7</span></div>
+          <div class="stat-lbl">Cross-Window State Replication</div>
         </div>
       </div>
     </div>
-    <div class="rp-footer">
-      <div class="rp-tools">${toolTagsStr}</div> [cite: 161]
-      <button class="rp-del" onclick="removeCard('${id}',null)">Remove</button> [cite: 161]
-    </div>`;
-    
-  card.querySelector('.rp-expand').onclick=()=>openLightbox(src); [cite: 162]
-  
-  if(!batchMode){
-    getStrip().appendChild(thumb); [cite: 162]
-    getGrid().appendChild(card); [cite: 162]
-    if(!existingProject){
-      card.style.opacity='0';card.style.transform='translateY(24px)'; [cite: 162]
-      requestAnimationFrame(()=>{
-        card.style.transition='opacity .5s ease,transform .5s ease'; [cite: 162]
-        card.style.opacity='1';card.style.transform='none'; [cite: 162]
+
+    <section style="background:linear-gradient(180deg, var(--ink) 0%, var(--ink2) 100%)">
+      <div class="section-inner">
+        <h2 class="section-title reveal">Featured Deployments</h2>
+        <p class="section-subtitle reveal">A short selection of recently cataloged insight systems. Click any item to explore its core design components.</p>
+        <div class="home-rp-grid reveal delay-1" id="homeReportsContainer">
+          </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="page" id="reports">
+    <section>
+      <div class="section-inner">
+        <h1 class="section-title">Analytical Systems Workspace</h1>
+        <p class="section-subtitle">A distributed documentation repository containing complete layout design specifications, multi-source metric cards, and validation workflows.</p>
+        
+        <div class="gallery-layout">
+          <aside class="control-panel">
+            <div>
+              <div class="panel-sec-title">Asset Deployment Engine</div>
+              <div class="upload-box" id="dropZone">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <h4>Drop design blueprint here</h4>
+                <p>or click to scan file system</p>
+                <input type="file" id="fileInput" accept="image/*" multiple style="display:none"/>
+              </div>
+            </div>
+            
+            <div>
+              <div class="panel-sec-title">Active Environment Node</div>
+              <div class="u-strip" id="uploadedStrip">
+                </div>
+            </div>
+            <div class="upload-count-lbl" id="uploadCount">0 images uploaded</div>
+          </aside>
+
+          <main class="report-grid" id="reportGrid">
+            <div class="empty-state" id="emptyState">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+              <h3>Repository Index Empty</h3>
+              <p>No analytical report blueprints have been staged to this running instance node.</p>
+              <button class="btn-secondary" id="emptyStateBtn" style="padding:10px 20px;font-size:13.5px">Initialize First Asset</button>
+            </div>
+            </main>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="m-upload-action">
+    <button class="m-action-btn" id="mobileUploadBtn" aria-label="Upload Report Asset">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+    <input type="file" id="fileInputMobile" accept="image/*" multiple style="display:none"/>
+  </div>
+
+  <div class="modal-bg" id="uploadModalBg">
+    <div class="modal-wrapper">
+      <div class="m-header">
+        <h3>Catalog Report Architecture</h3>
+        <button id="mCancel" style="color:var(--txt-dim);font-size:18px">✕</button>
+      </div>
+      <div class="m-body">
+        <div class="m-preview-frame" id="mPreview" style="width:100%;height:220px;border-radius:var(--radius-s);overflow:hidden;background:var(--ink3);border:1px solid var(--rim)">
+          </div>
+        <div class="m-form">
+          <div class="form-grp">
+            <label>Report Asset Identity Heading</label>
+            <input type="text" id="mTitle" placeholder="e.g., Executive Logistics Telemetry Matrix"/>
+          </div>
+          <div class="form-grp">
+            <label>Primary Core Analytics Functional Category</label>
+            <select id="mCategory">
+              <option value="Sales Analytics">Sales Analytics</option>
+              <option value="Health Analytics">Health Analytics</option>
+              <option value="Business Intelligence">Business Intelligence</option>
+              <option value="Dashboard">Dashboard</option>
+              <option value="Data Report">Data Report</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-grp">
+            <label>Detailed Architectural Overview Summary Context</label>
+            <textarea id="mDesc" rows="3" placeholder="Describe data relationships, visual storytelling layout solutions, and business outcomes..."></textarea>
+          </div>
+          <div class="form-grp">
+            <label>Core Integrated Platform Architecture (Comma Separated Strings)</label>
+            <input type="text" id="mTools" value="Power BI, Excel"/>
+          </div>
+          <div class="form-grp" style="display:none">
+            <input type="hidden" id="mYear"/>
+          </div>
+          <div class="form-grp">
+            <label>Primary Telemetry System Insights (Bullet Matrix Lines)</label>
+            <input type="text" id="mHl1" placeholder="Key Insight Bullet 1 (e.g., Identified 14% operational bottleneck)"/>
+            <input type="text" id="mHl2" placeholder="Key Insight Bullet 2 (e.g., Built multi-threaded DAX calendar schema)" style="margin-top:6px"/>
+            <input type="text" id="mHl3" placeholder="Key Insight Bullet 3 (e.g., Standardized interactive HTML rendering)" style="margin-top:6px"/>
+          </div>
+        </div>
+      </div>
+      <div class="m-footer">
+        <span style="font-size:12px;color:var(--txt-dim);font-family:var(--font-mono)">Asset Pipeline Node Form</span>
+        <button class="btn-primary" id="mSave" style="padding:10px 22px;font-size:14px">Stage Asset to Ledger</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-bg" id="detailModalBg">
+    <div class="modal-wrapper dm-grid">
+      <div class="dm-img-box">
+        <img id="dmImg" src="" alt="High resolution architecture preview dashboard image layer"/>
+        <button class="rp-expand" id="dmLightboxBtn" title="Launch Fullscreen Focus Rendering Mode" style="opacity:1;transform:none">🔍</button>
+      </div>
+      <div style="padding:32px;display:flex;flex-direction:column;max-height:80vh;overflow-y:auto">
+        <div style="display:flex;justify-content:space-between;align-items:start">
+          <span id="dmBadge"></span>
+          <button id="dmClose" style="color:var(--txt-dim);font-size:18px;line-height:1">✕</button>
+        </div>
+        <div class="dm-title-row">
+          <h2 id="dmTitle"></h2>
+          <div class="dm-meta-row">
+            <span>Domain Cluster: <strong id="dmCat"></strong></span>
+            <span>Release Year: <strong id="dmYear"></strong></span>
+          </div>
+        </div>
+        <div style="flex-grow:1">
+          <div class="dm-section-lbl" style="margin-top:0">System Structural Overview Blueprint</div>
+          <p class="dm-desc-txt" id="dmDesc"></p>
+          <div class="dm-section-lbl">Performance Optimization Engineering Metrics</div>
+          <div class="dm-hl-box" id="dmHighlights"></div>
+          <div class="dm-section-lbl">Integrated Stack Matrix</div>
+          <div class="dm-tools-box" id="dmTools"></div>
+        </div>
+        <button class="btn-secondary" id="dmCloseBtn2" style="margin-top:32px;padding:10px 0;width:100%;font-size:13px;justify-content:center">Exit Technical Documentation View</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lightbox-bg" id="lightbox">
+    <button class="lightbox-close" id="lbClose" aria-label="Dismiss Fullscreen Window Overlay">✕</button>
+    <img id="lbImg" src="" alt="Expanded structural graphics analysis window layer display frame"/>
+  </div>
+
+  <script>
+  /* ═══════════════════════ STORAGE ═══════════════════════ */
+  const STORAGE_KEY = 'ij_portfolio_v3';
+  const IMG_PREFIX = 'ij_img_v3_';
+  const AVATAR_KEY = 'ij_avatar_v3';
+  const COMMENTS_KEY = 'ij_comments_v3';
+
+  function saveProjects(arr){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr.map(p=>({...p,src:undefined}))));
+      arr.forEach(p=>{
+        if(p.src&&p.src.startsWith('data:image')) localStorage.setItem(IMG_PREFIX+p.id,p.src);
+      });
+    }catch(e){console.warn('Storage write failed',e)}
+  }
+
+  function loadProjects(){
+    try{
+      const raw=localStorage.getItem(STORAGE_KEY);
+      if(!raw) return [];
+      return JSON.parse(raw).map(p=>({...p,src:localStorage.getItem(IMG_PREFIX+p.id)||''}));
+    }catch(e){return []}
+  }
+
+  function deleteProjectImage(id){
+    try{ localStorage.removeItem(IMG_PREFIX+id); }catch(e){}
+  }
+
+  function loadComments(){
+    try{
+      const raw=localStorage.getItem(COMMENTS_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){return {}}
+  }
+
+  function saveComments(obj){
+    try{ localStorage.setItem(COMMENTS_KEY, JSON.stringify(obj)); }catch(e){}
+  }
+
+  let projects = loadProjects();
+  let comments = loadComments();
+
+  /* ═══════════════════════ MULTI-WINDOW & DEVICE SYNC ═══════════════════════ */
+  // Listens for localStorage variations triggered in other mobile viewports or parallel windows
+  window.addEventListener('storage', (e) => {
+    if (e.key === STORAGE_KEY) {
+      projects = loadProjects();
+      renderAll();
+    }
+    if (e.key === COMMENTS_KEY) {
+      comments = loadComments();
+      projects.forEach(p => {
+        renderComments(p.id);
       });
     }
-    renderComments(id); [cite: 162]
-    checkEmpty(); [cite: 162]
-    renderHomePreview(); [cite: 162]
-  }
-  return {thumb,card}; [cite: 163]
-}
-
-function renderAll(){
-  const strip=getStrip(); [cite: 128]
-  const grid=getGrid(); [cite: 128]
-  if(!strip||!grid) return;
-  
-  strip.innerHTML='';
-  grid.querySelectorAll('.rp-card').forEach(c=>c.remove());
-  
-  if(!projects||!projects.length){checkEmpty();renderHomePreview();return;}
-  
-  const stripFrag=document.createDocumentFragment();
-  const gridFrag=document.createDocumentFragment();
-  
-  projects.forEach(proj=>{
-    if(proj.src){
-      const {thumb,card}=createCard(proj.src,proj,true,true);
-      stripFrag.appendChild(thumb);
-      gridFrag.appendChild(card);
+    if (e.key === AVATAR_KEY) {
+      loadAvatar();
     }
   });
-  
-  strip.appendChild(stripFrag);
-  
-  const cards=Array.from(gridFrag.querySelectorAll('.rp-card'));
-  cards.forEach(card=>{card.style.opacity='0';card.style.transform='translateY(20px)'});
-  grid.appendChild(gridFrag);
-  
-  requestAnimationFrame(()=>{
-    cards.forEach((card,i)=>{
-      setTimeout(()=>{\r
-        card.style.transition='opacity .6s cubic-bezier(0.2,0.8,0.2,1),transform .6s cubic-bezier(0.2,0.8,0.2,1)';\r
-        card.style.opacity='1';card.style.transform='none';\r
-      },i*80);\r
-    });
-  });
-  
-  projects.forEach(p=>renderComments(p.id));
-  checkEmpty();
-  renderHomePreview();
-}
 
-function renderHomePreview(){
-  const c=document.getElementById('homeReportsContainer');
-  const h=document.getElementById('homeReportsSection');
-  if(!c) return;
-  c.innerHTML='';
-  
-  if(!projects.length){
-    if(h) h.style.display='none';
-    return;
+  /* ═══════════════════════ NAVIGATION & RENDERING ═══════════════════════ */
+  function showPage(pageId){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    const activePage=document.getElementById(pageId);
+    if(activePage) activePage.classList.add('active');
+    
+    document.querySelectorAll('.nav-links a').forEach(a=>{
+      a.classList.toggle('nav-active', a.getAttribute('onclick')?.includes(pageId));
+    });
+    
+    toggleDrawer(false);
+    window.scrollTo({top:0,behavior:'smooth'});
   }
-  if(h) h.style.display='block';
-  
-  projects.slice(0,3).forEach(p=>{
-    const d=document.createElement('div');
-    d.className='home-rp-card';
-    const cls=tagClasses[p.category]||'t-dim';
-    d.innerHTML=`
-      <div class="home-rp-img">
-        <img src="${p.src||''}" alt=""/>
-        <div class="home-rp-img-overlay"></div>
-        <span class="tag ${cls} home-rp-badge">${escHtml(p.category)}</span>
+
+  function toggleDrawer(force){
+    const d=document.getElementById('drawer');
+    if(!d) return;
+    if(typeof force==='boolean') d.classList.toggle('open', force);
+    else d.classList.toggle('open');
+  }
+
+  function initNavScroll(){
+    const nav=document.getElementById('nav');
+    window.addEventListener('scroll',()=>{
+      if(window.scrollY>20) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    });
+  }
+
+  function escHtml(str){
+    if(!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ═══════════════════════ UPLOAD CORE MANAGEMENT ═══════════════════════ */
+  const tagClasses={'Sales Analytics':'t-gold','Health Analytics':'t-em','Business Intelligence':'t-gold','Dashboard':'t-gold','Data Report':'t-dim','Other':'t-dim'};
+  let pendingFiles=[],pendingIdx=0;
+
+  function getStrip(){return document.getElementById('uploadedStrip')}
+  function getGrid(){return document.getElementById('reportGrid')}
+  function getEmpty(){return document.getElementById('emptyState')}
+
+  function checkEmpty(){
+    const cards=getGrid().querySelectorAll('.rp-card');
+    getEmpty().style.display=cards.length===0?'flex':'none';
+    updateCount();
+    const stat=document.getElementById('home-stat-projects');
+    if(stat) stat.textContent=projects.length;
+  }
+
+  function updateCount(){
+    const el=document.getElementById('uploadCount');
+    const n=projects.length;
+    if(el) el.textContent=`${n} image${n!==1?'s':''} uploaded`;
+  }
+
+  function processFiles(files){
+    const imgs=Array.from(files).filter(f=>f.type.startsWith('image/'));
+    if(!imgs.length) return;
+    pendingFiles=imgs;pendingIdx=0;
+    openNextModal();
+  }
+
+  function initUploadListeners(){
+    const dropZone=document.getElementById('dropZone');
+    const fileInput=document.getElementById('fileInput');
+    
+    if(dropZone){
+      dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('hovered')});
+      dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('hovered'));
+      dropZone.addEventListener('drop',e=>{
+        e.preventDefault();dropZone.classList.remove('hovered');
+        processFiles(e.dataTransfer.files);
+      });
+    }
+    
+    if(fileInput){
+      fileInput.addEventListener('change',function(){
+        if(this.files && this.files.length) processFiles(this.files);
+        this.value='';
+      });
+    }
+    
+    const mobileBtn=document.getElementById('mobileUploadBtn');
+    const mobileInput=document.getElementById('fileInputMobile');
+    
+    if(mobileBtn && mobileInput){
+      mobileBtn.addEventListener('click',function(e){
+        e.preventDefault(); e.stopPropagation();
+        mobileInput.click();
+      });
+      mobileInput.addEventListener('change',function(){
+        if(this.files && this.files.length){ processFiles(this.files); }
+        this.value='';
+      });
+    }
+    
+    const esBtn = document.getElementById('emptyStateBtn');
+    if(esBtn){
+      esBtn.addEventListener('click',function(){
+        if(window.innerWidth<=720 && mobileInput){ mobileInput.click(); }
+        else if(fileInput) { fileInput.click(); }
+      });
+    }
+  }
+
+  function openNextModal(){
+    if(pendingIdx>=pendingFiles.length) return;
+    const file=pendingFiles[pendingIdx++];
+    const r=new FileReader();
+    r.onload=e=>{
+      const src=e.target.result;
+      document.getElementById('mPreview').innerHTML=`<img src="${src}" style="width:100%;height:100%;object-fit:cover"/>`;
+      document.getElementById('mTitle').value=file.name.replace(/\.[^/.]+$/,'').replace(/[-_]/g,' ');
+      document.getElementById('mDesc').value='';
+      document.getElementById('mTools').value='Power BI, Excel';
+      document.getElementById('mYear').value=new Date().getFullYear();
+      document.getElementById('mHl1').value='';
+      document.getElementById('mHl2').value='';
+      document.getElementById('mHl3').value='';
+      document.getElementById('uploadModalBg').classList.add('open');
+    };
+    r.readAsDataURL(file);
+  }
+
+  /* ═══════════════════════ CARD CREATION & PREVIEW ═══════════════════════ */
+  function createCard(src, project, batchMode=false, existingProject=false){
+    const {id,title,desc,category,hl1,hl2,hl3,tools,year}=project;
+    
+    const thumb=document.createElement('div');
+    thumb.className='s-thumb'; thumb.id=`t-${id}`;
+    thumb.innerHTML=`<img src="${src}" alt=""/><div class="s-label">${escHtml(title)}</div><button class="s-del" title="Delete entry">✕</button>`;
+    thumb.querySelector('img').onclick=()=>showPage('reports');
+    thumb.querySelector('.s-del').onclick=(e)=>{
+      e.stopPropagation();
+      removeCard(id,thumb);
+    };
+    
+    const card=document.createElement('div');
+    card.className='rp-card'; card.id=`c-${id}`;
+    
+    const badg=category||'Other';
+    const cls=tagClasses[badg]||'t-dim';
+    const shortDesc=desc && desc.length>110 ? desc.substring(0,107)+'...' : (desc||'');
+    
+    let toolTagsStr='';
+    if(tools){
+      toolTagsStr=tools.split(',').map(t=>t.trim()).filter(Boolean)
+        .map(t=>`<span class="tag t-dim" style="font-size:8.5px;padding:2px 7px">${escHtml(t)}</span>`).join('');
+    }
+    
+    card.innerHTML=`
+      <div class="rp-img">
+        <img src="${src}" alt="${escHtml(title)}"/>
+        <div class="rp-img-overlay"></div>
+        <span class="tag ${cls} rp-badge">${escHtml(badg)}</span>
+        <button class="rp-expand" title="Open lightbox">🔍</button>
       </div>
-      <div class="home-rp-info">
-        <div>
-          <h3 class="home-rp-title">${escHtml(p.title)}</h3>
-          <div class="home-rp-meta">${escHtml(p.category)} &nbsp;·&nbsp; ${escHtml(p.year)}</div>
+      <div class="rp-body">
+        <div class="rp-meta"><span class="rp-type">${escHtml(badg)}</span><span class="rp-yr">${escHtml(year||'')}</span></div>
+        <h3 class="rp-title">${escHtml(title)}</h3>
+        <p class="rp-desc">${escHtml(shortDesc)}</p>
+        <button class="rp-details-btn" onclick="openDetail('${id}')">
+          View Report Details
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="rp-comments-section">
+        <button class="cs-toggle" onclick="toggleComments(this,'${id}')">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          Comments <span class="ccount" id="cc-${id}">0</span>
+        </button>
+        <div class="cs-body" id="cb-${id}">
+          <div class="comments-list" id="cl-${id}"><div class="comments-empty">No comments yet.</div></div>
+          <div class="comment-form">
+            <input class="comment-input" id="ci-${id}" placeholder="Add a comment…" onkeydown="if(event.key==='Enter')postComment('${id}')"/>
+            <button class="comment-submit" onclick="postComment('${id}')">Post</button>
+          </div>
         </div>
-        <div class="home-rp-cta">View Live Dashboard Analysis <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
+      </div>
+      <div class="rp-footer">
+        <div class="rp-tools">${toolTagsStr}</div>
+        <button class="rp-del" onclick="removeCard('${id}',null)">Remove</button>
       </div>`;
-    d.onclick=()=>{
-      showPage('reports');
-      setTimeout(()=>{
-        const el=document.getElementById(`c-${p.id}`);
-        if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
-      },150);
-    };
-    c.appendChild(d);
-  });
-}
-
-function removeCard(id, thumbEl){
-  if(!confirm('Are you sure you want to permanently remove this report from your portfolio?')) return;
-  projects=projects.filter(p=>p.id!==id);
-  saveProjects(projects);
-  deleteProjectImage(id);
-  
-  if(comments[id]) {
-    delete comments[id];
-    saveComments(comments);
-  }
-  
-  const th=thumbEl||document.getElementById(`t-${id}`);
-  const cd=document.getElementById(`c-${id}`);
-  if(th) th.remove();
-  if(cd) cd.remove();
-  
-  checkEmpty();
-  renderHomePreview();
-}
-
-/* ═══════════════════════ MODAL EVENT CAPTURES ═══════════════════════ */
-function initModalListeners(){
-  const bg=document.getElementById('uploadModalBg');
-  const cancel=document.getElementById('mCancel');
-  const save=document.getElementById('mSave');
-  
-  function close(){
-    bg.classList.remove('open');
-    document.getElementById('mPreview').innerHTML='';
-    if(pendingIdx<pendingFiles.length) setTimeout(openNextModal,250);
-  }
-  
-  if(cancel) cancel.onclick=close;
-  
-  if(save){
-    save.onclick=()=>{
-      const t=document.getElementById('mTitle').value.trim()||'Untitled Report';
-      const d=document.getElementById('mDesc').value.trim();
-      const c=document.getElementById('mCategory').value;
-      const h1=document.getElementById('mHl1').value.trim();
-      const h2=document.getElementById('mHl2').value.trim();
-      const h3=document.getElementById('mHl3').value.trim();
-      const tl=document.getElementById('mTools').value.trim();
-      const y=document.getElementById('mYear').value.trim()||new Date().getFullYear();
-      const img=document.getElementById('mPreview').querySelector('img');
-      const src=img?img.src:'';
       
-      const newProj={id:'p'+Date.now()+'_'+Math.floor(Math.random()*1000),title:t,desc:d,category:c,hl1:h1,hl2:h2,hl3:h3,tools:tl,year:y,src:src};
-      projects.unshift(newProj);
-      saveProjects(projects);
-      createCard(src,newProj,false,false);
-      close();
-    };
-  }
-  
-  const dmBg=document.getElementById('detailModalBg');
-  const dmClose=document.getElementById('dmClose');
-  const dmClose2=document.getElementById('dmCloseBtn2');
-  if(dmClose) dmClose.onclick=()=>dmBg.classList.remove('open');
-  if(dmClose2) dmClose2.onclick=()=>dmBg.classList.remove('open');
-}
-
-function openDetail(id){
-  const p=projects.find(proj=>proj.id===id);
-  if(!p) return;
-  const dm=document.getElementById('detailModalBg');
-  document.getElementById('dmImg').src=p.src||'';
-  document.getElementById('dmTitle').textContent=p.title;
-  document.getElementById('dmYear').textContent=p.year||'';
-  document.getElementById('dmCat').textContent=p.category;
-  document.getElementById('dmDesc').textContent=p.desc||'No description provided.';
-  
-  const badg=p.category||'Other';
-  const elB=document.getElementById('dmBadge');
-  elB.textContent=badg;
-  elB.className=`dm-badge tag ${tagClasses[badg]||'t-dim'}`;
-  
-  const hlBox=document.getElementById('dmHighlights');
-  hlBox.innerHTML='';
-  let hasHl=false;
-  [p.hl1,p.hl2,p.hl3].forEach(h=>{
-    if(h && h.trim()){
-      hasHl=true;
-      const div=document.createElement('div');
-      div.className='dm-hl-item';
-      div.innerHTML=`<span class="dm-hl-dot"></span><span>${escHtml(h.trim())}</span>`;
-      hlBox.appendChild(div);
+    card.querySelector('.rp-expand').onclick=()=>openLightbox(src);
+    
+    if(!batchMode){
+      getStrip().appendChild(thumb);
+      getGrid().appendChild(card);
+      if(!existingProject){
+        card.style.opacity='0';card.style.transform='translateY(24px)';
+        requestAnimationFrame(()=>{
+          card.style.transition='opacity .5s ease,transform .5s ease';
+          card.style.opacity='1';card.style.transform='none';
+        });
+      }
+      renderComments(id);
+      checkEmpty();
+      renderHomePreview();
     }
-  });
-  hlBox.style.display=hasHl?'block':'none';
-  
-  const tBox=document.getElementById('dmTools');
-  tBox.innerHTML='';
-  if(p.tools){
-    p.tools.split(',').map(t=>t.trim()).filter(Boolean).forEach(t=>{
-      const span=document.createElement('span');
-      span.className='tag t-dim';
-      span.textContent=t;
-      tBox.appendChild(span);
-    });
+    return {thumb,card};
   }
-  
-  document.getElementById('dmLightboxBtn').onclick=()=>openLightbox(p.src);
-  dm.classList.add('open');
-}
 
-/* ═══════════════════════ LIGHTBOX PREVIEW ═══════════════════════ */
-function initLightbox(){
-  const lb=document.getElementById('lightbox');
-  const lbImg=document.getElementById('lbImg');
-  const lbClose=document.getElementById('lbClose');
-  if(!lb) return;
-  window.openLightbox=(src)=>{
-    lbImg.src=src;
-    lb.classList.add('open');
-  };
-  lbClose.onclick=()=>lb.classList.remove('open');
-  lb.onclick=(e)=>{if(e.target!==lbImg) lb.classList.remove('open')};
-}
-
-/* ═══════════════════════ COMMENT MANAGEMENT ═══════════════════════ */
-function toggleComments(btn, id){
-  const body=document.getElementById(`cb-${id}`);
-  if(!body) return;
-  const isOpening=!body.classList.contains('open');
-  body.classList.toggle('open', isOpening);
-  btn.classList.toggle('open', isOpening);
-}
-
-function renderComments(id){
-  const box=document.getElementById(`cl-${id}`);
-  const countEl=document.getElementById(`cc-${id}`);
-  if(!box) return;
-  
-  const list=comments[id]||[];
-  if(countEl) countEl.textContent=list.length;
-  
-  if(!list.length){
-    box.innerHTML='<div class="comments-empty">No comments yet. Be the first!</div>';
-    return;
-  }
-  
-  box.innerHTML=list.map((c,idx)=>`
-    <div class="comment-item">
-      <div class="ci-head">
-        <span class="ci-name">${escHtml(c.name)}</span>
-        <div style="display:flex;align-items:center">
-          <span class="ci-time">${escHtml(c.time)}</span>
-          <button class="ci-del" onclick="deleteComment('${id}',${idx})" title="Delete comment">✕</button>
-        </div>
-      </div>
-      <div class="ci-txt">${escHtml(c.text)}</div>
-    </div>`).join('');
-}
-
-function postComment(id){
-  const inp=document.getElementById(`ci-${id}`);
-  if(!inp) return;
-  const val=inp.value.trim();
-  if(!val) return;
-  
-  if(!comments[id]) comments[id]=[];
-  
-  const now=new Date();
-  const timeStr=now.toLocaleDateString(undefined,{month:'short',day:'numeric'}) + ', ' + now.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit',hour12:false});
-  
-  comments[id].push({name:'Reviewer',text:val,time:timeStr});
-  saveComments(comments);
-  renderComments(id);
-  inp.value='';
-}
-
-function deleteComment(id, idx){
-  if(!comments[id] || !comments[id][idx]) return;
-  comments[id].splice(idx,1);
-  if(!comments[id].length) delete comments[id];
-  saveComments(comments);
-  renderComments(id);
-}
-
-/* ═══════════════════════ AVATAR UPDATE FIX ═══════════════════════ */
-function initAvatar(){
-  const inp=document.getElementById('avatarInput');
-  if(!inp) return;
-  inp.addEventListener('change',function(){
-    if(this.files && this.files.length){
-      const r=new FileReader();
-      r.onload=e=>{
-        try{
-          localStorage.setItem(AVATAR_KEY, e.target.result);
-          loadAvatar();
-        }catch(err){alert('Image size too large for local profile storage!')}
-      };
-      r.readAsDataURL(this.files[0]);
-    }
-  });
-  loadAvatar();
-}
-
-function loadAvatar(){
-  const data=localStorage.getItem(AVATAR_KEY);
-  const img=document.getElementById('avatarImg');
-  const init=document.getElementById('avInit');
-  if(!img || !init) return;
-  if(data){
-    img.src=data;
-    img.classList.add('show');
-    init.style.display='none';
-  }else{
-    img.src='';
-    img.classList.remove('show');
-    init.style.display='block';
-  }
-}
-
-/* ═══════════════════════ INTERSECTION OBSERVER ═══════════════════════ */
-function initScrollReveals(){
-  if(!('IntersectionObserver' in window)) return;
-  const obs=new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('vis');
-        obs.unobserve(e.target);
+  function renderAll(){
+    const strip=getStrip();
+    const grid=getGrid();
+    if(!strip||!grid) return;
+    
+    strip.innerHTML='';
+    grid.querySelectorAll('.rp-card').forEach(c=>c.remove());
+    
+    if(!projects||!projects.length){checkEmpty();renderHomePreview();return;}
+    
+    const stripFrag=document.createDocumentFragment();
+    const gridFrag=document.createDocumentFragment();
+    
+    projects.forEach(proj=>{
+      if(proj.src){
+        const {thumb,card}=createCard(proj.src,proj,true,true);
+        stripFrag.appendChild(thumb);
+        gridFrag.appendChild(card);
       }
     });
-  },{threshold:0.05,rootMargin:'0px 0px -40px 0px'});
-  
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-}
+    
+    strip.appendChild(stripFrag);
+    
+    const cards=Array.from(gridFrag.querySelectorAll('.rp-card'));
+    cards.forEach(card=>{card.style.opacity='0';card.style.transform='translateY(20px)'});
+    grid.appendChild(gridFrag);
+    
+    requestAnimationFrame(()=>{
+      cards.forEach((card,i)=>{
+        setTimeout(()=>{
+          card.style.transition='opacity .6s cubic-bezier(0.2,0.8,0.2,1),transform .6s cubic-bezier(0.2,0.8,0.2,1)';
+          card.style.opacity='1';card.style.transform='none';
+        },i*80);
+      });
+    });
+    
+    projects.forEach(p=>renderComments(p.id));
+    checkEmpty();
+    renderHomePreview();
+  }
 
-/* ═══════════════════════ CORE INITIALIZATION ═══════════════════════ */
-window.onload=()=>{
-  initNavScroll();
-  initUploadListeners();
-  initModalListeners();
-  initLightbox();
-  initAvatar();
-  renderAll();
-  initScrollReveals();
-};
+  function renderHomePreview(){
+    const c=document.getElementById('homeReportsContainer');
+    const h=document.getElementById('homeReportsSection');
+    if(!c) return;
+    c.innerHTML='';
+    
+    if(!projects.length){
+      if(h) h.style.display='none';
+      return;
+    }
+    if(h) h.style.display='block';
+    
+    projects.slice(0,3).forEach(p=>{
+      const d=document.createElement('div');
+      d.className='home-rp-card';
+      const cls=tagClasses[p.category]||'t-dim';
+      d.innerHTML=`
+        <div class="home-rp-img">
+          <img src="${p.src||''}" alt=""/>
+          <div class="home-rp-img-overlay"></div>
+          <span class="tag ${cls} home-rp-badge">${escHtml(p.category)}</span>
+        </div>
+        <div class="home-rp-info">
+          <div>
+            <h3 class="home-rp-title">${escHtml(p.title)}</h3>
+            <div class="home-rp-meta">${escHtml(p.category)} &nbsp;·&nbsp; ${escHtml(p.year)}</div>
+          </div>
+          <div class="home-rp-cta">View Live Dashboard Analysis <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div>
+        </div>`;
+      d.onclick=()=>{
+        showPage('reports');
+        setTimeout(()=>{
+          const el=document.getElementById(`c-${p.id}`);
+          if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+        },150);
+      };
+      c.appendChild(d);
+    });
+  }
+
+  function removeCard(id, thumbEl){
+    if(!confirm('Are you sure you want to permanently remove this report from your portfolio?')) return;
+    projects=projects.filter(p=>p.id!==id);
+    saveProjects(projects);
+    deleteProjectImage(id);
+    
+    if(comments[id]) {
+      delete comments[id];
+      saveComments(comments);
+    }
+    
+    const th=thumbEl||document.getElementById(`t-${id}`);
+    const cd=document.getElementById(`c-${id}`);
+    if(th) th.remove();
+    if(cd) cd.remove();
+    
+    checkEmpty();
+    renderHomePreview();
+  }
+
+  /* ═══════════════════════ MODAL EVENT CAPTURES ═══════════════════════ */
+  function initModalListeners(){
+    const bg=document.getElementById('uploadModalBg');
+    const cancel=document.getElementById('mCancel');
+    const save=document.getElementById('mSave');
+    
+    function close(){
+      bg.classList.remove('open');
+      document.getElementById('mPreview').innerHTML='';
+      if(pendingIdx<pendingFiles.length) setTimeout(openNextModal,250);
+    }
+    
+    if(cancel) cancel.onclick=close;
+    
+    if(save){
+      save.onclick=()=>{
+        const t=document.getElementById('mTitle').value.trim()||'Untitled Report';
+        const d=document.getElementById('mDesc').value.trim();
+        const c=document.getElementById('mCategory').value;
+        const h1=document.getElementById('mHl1').value.trim();
+        const h2=document.getElementById('mHl2').value.trim();
+        const h3=document.getElementById('mHl3').value.trim();
+        const tl=document.getElementById('mTools').value.trim();
+        const y=document.getElementById('mYear').value.trim()||new Date().getFullYear();
+        const img=document.getElementById('mPreview').querySelector('img');
+        const src=img?img.src:'';
+        
+        const newProj={id:'p'+Date.now()+'_'+Math.floor(Math.random()*1000),title:t,desc:d,category:c,hl1:h1,hl2:h2,hl3:h3,tools:tl,year:y,src:src};
+        projects.unshift(newProj);
+        saveProjects(projects);
+        createCard(src,newProj,false,false);
+        close();
+      };
+    }
+    
+    const dmBg=document.getElementById('detailModalBg');
+    const dmClose=document.getElementById('dmClose');
+    const dmClose2=document.getElementById('dmCloseBtn2');
+    if(dmClose) dmClose.onclick=()=>dmBg.classList.remove('open');
+    if(dmClose2) dmClose2.onclick=()=>dmBg.classList.remove('open');
+  }
+
+  function openDetail(id){
+    const p=projects.find(proj=>proj.id===id);
+    if(!p) return;
+    const dm=document.getElementById('detailModalBg');
+    document.getElementById('dmImg').src=p.src||'';
+    document.getElementById('dmTitle').textContent=p.title;
+    document.getElementById('dmYear').textContent=p.year||'';
+    document.getElementById('dmCat').textContent=p.category;
+    document.getElementById('dmDesc').textContent=p.desc||'No description provided.';
+    
+    const badg=p.category||'Other';
+    const elB=document.getElementById('dmBadge');
+    elB.textContent=badg;
+    elB.className=`dm-badge tag ${tagClasses[badg]||'t-dim'}`;
+    
+    const hlBox=document.getElementById('dmHighlights');
+    hlBox.innerHTML='';
+    let hasHl=false;
+    [p.hl1,p.hl2,p.hl3].forEach(h=>{
+      if(h && h.trim()){
+        hasHl=true;
+        const div=document.createElement('div');
+        div.className='dm-hl-item';
+        div.innerHTML=`<span class="dm-hl-dot"></span><span>${escHtml(h.trim())}</span>`;
+        hlBox.appendChild(div);
+      }
+    });
+    hlBox.style.display=hasHl?'block':'none';
+    
+    const tBox=document.getElementById('dmTools');
+    tBox.innerHTML='';
+    if(p.tools){
+      p.tools.split(',').map(t=>t.trim()).filter(Boolean).forEach(t=>{
+        const span=document.createElement('span');
+        span.className='tag t-dim';
+        span.textContent=t;
+        tBox.appendChild(span);
+      });
+    }
+    
+    document.getElementById('dmLightboxBtn').onclick=()=>openLightbox(p.src);
+    dm.classList.add('open');
+  }
+
+  /* ═══════════════════════ LIGHTBOX PREVIEW ═══════════════════════ */
+  function initLightbox(){
+    const lb=document.getElementById('lightbox');
+    const lbImg=document.getElementById('lbImg');
+    const lbClose=document.getElementById('lbClose');
+    if(!lb) return;
+    window.openLightbox=(src)=>{
+      lbImg.src=src;
+      lb.classList.add('open');
+    };
+    lbClose.onclick=()=>lb.classList.remove('open');
+    lb.onclick=(e)=>{if(e.target!==lbImg) lb.classList.remove('open')};
+  }
+
+  /* ═══════════════════════ COMMENT MANAGEMENT ═══════════════════════ */
+  function toggleComments(btn, id){
+    const body=document.getElementById(`cb-${id}`);
+    if(!body) return;
+    const isOpening=!body.classList.contains('open');
+    body.classList.toggle('open', isOpening);
+    btn.classList.toggle('open', isOpening);
+  }
+
+  function renderComments(id){
+    const box=document.getElementById(`cl-${id}`);
+    const countEl=document.getElementById(`cc-${id}`);
+    if(!box) return;
+    
+    const list=comments[id]||[];
+    if(countEl) countEl.textContent=list.length;
+    
+    if(!list.length){
+      box.innerHTML='<div class="comments-empty">No comments yet. Be the first!</div>';
+      return;
+    }
+    
+    box.innerHTML=list.map((c,idx)=>`
+      <div class="comment-item">
+        <div class="ci-head">
+          <span class="ci-name">${escHtml(c.name)}</span>
+          <div style="display:flex;align-items:center">
+            <span class="ci-time">${escHtml(c.time)}</span>
+            <button class="ci-del" onclick="deleteComment('${id}',${idx})" title="Delete comment">✕</button>
+          </div>
+        </div>
+        <div class="ci-txt">${escHtml(c.text)}</div>
+      </div>`).join('');
+  }
+
+  function postComment(id){
+    const inp=document.getElementById(`ci-${id}`);
+    if(!inp) return;
+    const val=inp.value.trim();
+    if(!val) return;
+    
+    if(!comments[id]) comments[id]=[];
+    
+    const now=new Date();
+    const timeStr=now.toLocaleDateString(undefined,{month:'short',day:'numeric'}) + ', ' + now.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit',hour12:false});
+    
+    comments[id].push({name:'Reviewer',text:val,time:timeStr});
+    saveComments(comments);
+    renderComments(id);
+    inp.value='';
+  }
+
+  function deleteComment(id, idx){
+    if(!comments[id] || !comments[id][idx]) return;
+    comments[id].splice(idx,1);
+    if(!comments[id].length) delete comments[id];
+    saveComments(comments);
+    renderComments(id);
+  }
+
+  /* ═══════════════════════ AVATAR UPDATE FIX ═══════════════════════ */
+  function initAvatar(){
+    const inp=document.getElementById('avatarInput');
+    if(!inp) return;
+    inp.addEventListener('change',function(){
+      if(this.files && this.files.length){
+        const r=new FileReader();
+        r.onload=e=>{
+          try{
+            localStorage.setItem(AVATAR_KEY, e.target.result);
+            loadAvatar();
+          }catch(err){alert('Image size too large for local profile storage!')}
+        };
+        r.readAsDataURL(this.files[0]);
+      }
+    });
+    loadAvatar();
+  }
+
+  function loadAvatar(){
+    const data=localStorage.getItem(AVATAR_KEY);
+    const img=document.getElementById('avatarImg');
+    const init=document.getElementById('avInit');
+    if(!img || !init) return;
+    if(data){
+      img.src=data;
+      img.classList.add('show');
+      init.style.display='none';
+    }else{
+      img.src='';
+      img.classList.remove('show');
+      init.style.display='block';
+    }
+  }
+
+  /* ═══════════════════════ INTERSECTION OBSERVER ═══════════════════════ */
+  function initScrollReveals(){
+    if(!('IntersectionObserver' in window)) return;
+    const obs=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('vis');
+          obs.unobserve(e.target);
+        }
+      });
+    },{threshold:0.05,rootMargin:'0px 0px -40px 0px'});
+    
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  }
+
+  /* ═══════════════════════ CORE INITIALIZATION ═══════════════════════ */
+  window.onload=()=>{
+    initNavScroll();
+    initUploadListeners();
+    initModalListeners();
+    initLightbox();
+    initAvatar();
+    renderAll();
+    initScrollReveals();
+  };
+  </script>
+</body>
+</html>
