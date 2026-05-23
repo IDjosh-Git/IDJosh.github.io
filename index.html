@@ -3,188 +3,128 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>Idowu Joshua | Elite Data Analyst Portfolio</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
+<title>Idowu Joshua | Data Portfolio</title>
 
 <style>
 
-/* ================= ROOT ================= */
-:root{
---bg:#000;
---card:rgba(255,255,255,.03);
---border:rgba(255,255,255,.06);
---gold:#d4af37;
---gold2:#f6d66f;
---text:#f5f5f5;
---muted:#8d8d95;
---shadow:0 20px 70px rgba(0,0,0,.65);
-}
-
-/* ================= GLOBAL ================= */
-*{margin:0;padding:0;box-sizing:border-box;}
 body{
-font-family:'Outfit',sans-serif;
+margin:0;
+font-family:Arial;
 background:#000;
-color:var(--text);
-overflow-x:hidden;
+color:#fff;
 }
 
-section{padding:120px 7%;}
-
-/* ================= NAV ================= */
+/* NAV */
 nav{
-position:fixed;top:0;left:0;right:0;
-height:78px;
-display:flex;justify-content:space-between;align-items:center;
-padding:0 7%;
-background:rgba(0,0,0,.85);
-backdrop-filter:blur(20px);
-z-index:999;
-border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.logo{font-size:28px;font-family:'Playfair Display';}
-.logo span{color:var(--gold);}
-
-/* ================= HERO ================= */
-.hero{
-min-height:100vh;
-display:grid;
-grid-template-columns:1.1fr 420px;
-gap:60px;
-align-items:center;
-}
-
-.hero-title{
-font-size:90px;
-font-family:'Playfair Display';
-line-height:.95;
-}
-
-.hero-title span{color:var(--gold);}
-
-.hero-desc{color:var(--muted);margin-top:20px;line-height:1.8;}
-
-.btn{
-padding:14px 26px;
-border-radius:6px;
-border:none;
-cursor:pointer;
-font-weight:700;
-}
-
-.btn-gold{background:var(--gold);color:#000;}
-.btn-dark{background:#111;color:#fff;border:1px solid rgba(255,255,255,.1);}
-
-/* ================= PROFILE ================= */
-.profile-card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:24px;
-overflow:hidden;
-box-shadow:var(--shadow);
-}
-
-.profile-top{padding:40px;text-align:center;}
-
-.avatar{
-width:140px;height:140px;
-margin:auto;
-border-radius:50%;
-overflow:hidden;
-border:4px solid var(--gold);
-position:relative;
+display:flex;
+justify-content:space-between;
+padding:20px 40px;
 background:#111;
+position:sticky;
+top:0;
 }
 
-.avatar img{width:100%;height:100%;object-fit:cover;}
+nav a{color:#fff;margin:0 10px;text-decoration:none}
 
-.avatar-placeholder{
-position:absolute;inset:0;
-display:flex;align-items:center;justify-content:center;
-font-size:40px;
-color:var(--gold);
-font-weight:900;
+/* SECTIONS */
+section{
+padding:60px 40px;
 }
 
-.profile-name{margin-top:20px;font-size:28px;font-family:'Playfair Display';}
-.profile-role{color:var(--gold);font-size:12px;letter-spacing:3px;}
-
-.profile-body{padding:30px;border-top:1px solid rgba(255,255,255,.05);}
-
-/* ================= PROJECTS ================= */
-.upload-box{
-margin-top:40px;
-padding:40px;
-border:2px dashed rgba(255,255,255,.1);
-border-radius:20px;
-text-align:center;
+/* HERO */
+.hero{
+padding:80px 40px;
+background:linear-gradient(120deg,#111,#000);
 }
 
-.upload-box input{
-width:100%;
-margin-top:15px;
+.hero h1{
+font-size:50px;
 }
 
-.projects-grid{
-margin-top:40px;
+.hero span{color:gold}
+
+/* OVERVIEW */
+.overview-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:25px;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+margin-top:30px;
 }
 
-.project-card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:20px;
-overflow:hidden;
-box-shadow:var(--shadow);
-transition:.3s;
+.card{
+background:#111;
+padding:20px;
+border-radius:12px;
+border:1px solid #222;
 }
 
-.project-card:hover{transform:translateY(-8px);}
+.card h2{
+margin:0;
+font-size:30px;
+color:gold;
+}
 
-.project-image img{
+.card p{
+margin:5px 0 0;
+color:#aaa;
+}
+
+/* UPLOAD */
+.upload-box{
+background:#111;
+padding:20px;
+border-radius:12px;
+margin-top:20px;
+}
+
+input,select,textarea{
 width:100%;
-height:220px;
+margin:8px 0;
+padding:10px;
+background:#000;
+border:1px solid #333;
+color:#fff;
+border-radius:6px;
+}
+
+/* PROJECTS */
+.projects-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-top:30px;
+}
+
+.project{
+background:#111;
+border-radius:12px;
+overflow:hidden;
+border:1px solid #222;
+}
+
+.project img{
+width:100%;
+height:160px;
 object-fit:cover;
 }
 
-.project-content{padding:20px;}
-
-.project-title{
-font-size:22px;
-font-family:'Playfair Display';
-margin-top:10px;
+.project-body{
+padding:15px;
 }
 
-.project-desc{color:var(--muted);margin-top:10px;line-height:1.7;}
-
-.tool{
+.tag{
 display:inline-block;
-padding:6px 10px;
-background:rgba(212,175,55,.1);
-color:var(--gold);
-border-radius:999px;
-font-size:11px;
-margin:4px 4px 0 0;
+background:rgba(255,215,0,0.1);
+color:gold;
+padding:4px 8px;
+border-radius:20px;
+font-size:12px;
+margin:2px;
 }
 
-.meta{
-font-size:11px;
-color:#888;
-margin-top:10px;
-}
-
-/* ================= CONTACT ================= */
-.contact{
-text-align:center;
-padding:80px;
-background:var(--card);
-border-radius:30px;
-margin-top:80px;
+.small{
+color:#aaa;
+font-size:12px;
 }
 
 </style>
@@ -193,41 +133,75 @@ margin-top:80px;
 <body>
 
 <nav>
-<div class="logo">Idowu <span>Joshua</span></div>
-<a class="btn btn-gold" href="#projects">View Work</a>
+<div><b>Idowu Joshua</b></div>
+<div>
+<a href="#overview">Overview</a>
+<a href="#upload">Upload</a>
+<a href="#projects">Projects</a>
+</div>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-
-<div>
-<h1 class="hero-title">Turning <span>Data</span><br>Into Decisions</h1>
-<p class="hero-desc">
-Professional Data Analyst specializing in Power BI, SQL & Excel dashboards.
-</p>
-
-<div style="margin-top:20px;display:flex;gap:10px;">
-<button class="btn btn-gold">Hire Me</button>
-<button class="btn btn-dark">Contact</button>
-</div>
+<div class="hero">
+<h1>Turning <span>Data</span> Into Decisions</h1>
+<p>Power BI • Excel • SQL • Analytics Portfolio</p>
 </div>
 
-<!-- PROFILE -->
-<div class="profile-card">
+<!-- ================= OVERVIEW PAGE ================= -->
+<section id="overview">
 
-<div class="profile-top">
+<h2>📊 Portfolio Overview</h2>
 
-<div class="avatar">
-<img id="avatarImg">
-<div class="avatar-placeholder" id="avatarPlaceholder">IJ</div>
+<div class="overview-grid">
+
+<div class="card">
+<h2 id="totalProjects">0</h2>
+<p>Total Projects</p>
 </div>
 
-<input type="file" id="avatarUpload" accept="image/*">
+<div class="card">
+<h2 id="powerbiCount">0</h2>
+<p>Power BI Reports</p>
+</div>
 
-<div class="profile-name">Idowu Joshua</div>
-<div class="profile-role">Data Analyst</div>
+<div class="card">
+<h2 id="excelCount">0</h2>
+<p>Excel Reports</p>
+</div>
+
+<div class="card">
+<h2 id="sqlCount">0</h2>
+<p>SQL Projects</p>
+</div>
+
+<div class="card">
+<h2 id="latestDate">-</h2>
+<p>Latest Upload</p>
+</div>
 
 </div>
+
+</section>
+
+<!-- UPLOAD -->
+<section id="upload">
+
+<h2>Upload Report</h2>
+
+<div class="upload-box">
+
+<input type="text" id="title" placeholder="Report Title">
+<textarea id="desc" placeholder="Description"></textarea>
+
+<select id="category">
+<option>Power BI</option>
+<option>Excel</option>
+<option>SQL</option>
+<option>Other</option>
+</select>
+
+<input type="text" id="tools" placeholder="Tools (comma separated)">
+<input type="file" id="file" multiple>
 
 </div>
 
@@ -236,132 +210,104 @@ Professional Data Analyst specializing in Power BI, SQL & Excel dashboards.
 <!-- PROJECTS -->
 <section id="projects">
 
-<h2>Portfolio Reports</h2>
+<h2>Projects</h2>
 
-<!-- NEW UPLOAD FORM -->
-<div class="upload-box">
+<div class="projects-grid" id="grid"></div>
 
-<input type="text" id="reportTitle" placeholder="Report Title">
-<textarea id="reportDesc" placeholder="Report Description"></textarea>
-
-<select id="reportCategory">
-<option>Power BI</option>
-<option>Excel</option>
-<option>SQL</option>
-<option>Other</option>
-</select>
-
-<input type="text" id="reportTools" placeholder="Tools (comma separated)">
-<input type="file" id="projectUpload" multiple accept="image/*">
-
-</div>
-
-<div class="projects-grid" id="projectsGrid"></div>
-
-</section>
-
-<!-- CONTACT -->
-<section>
-<div class="contact">
-<h2>Let's Work Together</h2>
-<p>Email: yourmail@gmail.com</p>
-</div>
 </section>
 
 <script>
 
-/* ================= AVATAR ================= */
-const avatarUpload = document.getElementById('avatarUpload');
-const avatarImg = document.getElementById('avatarImg');
-const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+let projects = JSON.parse(localStorage.getItem("projects")) || [];
 
-avatarUpload.addEventListener('change', e=>{
-const file = e.target.files[0];
-const reader = new FileReader();
-reader.onload = ev=>{
-avatarImg.src = ev.target.result;
-avatarPlaceholder.style.display='none';
-localStorage.setItem('avatar', ev.target.result);
-};
-reader.readAsDataURL(file);
-});
+/* SAVE PROJECT */
+document.getElementById("file").addEventListener("change", function(){
 
-window.onload=()=>{
-const saved = localStorage.getItem('avatar');
-if(saved){
-avatarImg.src=saved;
-avatarPlaceholder.style.display='none';
-}
-loadProjects();
-};
-
-/* ================= PROJECTS ================= */
-let projects = JSON.parse(localStorage.getItem('projects')) || [];
-
-const upload = document.getElementById('projectUpload');
-const grid = document.getElementById('projectsGrid');
-
-upload.addEventListener('change', e=>{
-const files = [...e.target.files];
+let files = [...this.files];
 
 files.forEach(file=>{
-const reader = new FileReader();
 
-reader.onload = ev=>{
+let reader = new FileReader();
 
-const project = {
-image:ev.target.result,
-title:document.getElementById('reportTitle').value || file.name,
-desc:document.getElementById('reportDesc').value || "No description",
-category:document.getElementById('reportCategory').value,
-tools:(document.getElementById('reportTools').value||"").split(",").map(t=>t.trim()),
+reader.onload = e=>{
+
+let project = {
+image:e.target.result,
+title:document.getElementById("title").value || file.name,
+desc:document.getElementById("desc").value || "No description",
+category:document.getElementById("category").value,
+tools:document.getElementById("tools").value.split(",").map(t=>t.trim()),
 date:new Date().toLocaleDateString()
 };
 
 projects.push(project);
-localStorage.setItem('projects',JSON.stringify(projects));
-loadProjects();
+
+localStorage.setItem("projects",JSON.stringify(projects));
+
+render();
+overview();
+
 };
 
 reader.readAsDataURL(file);
-});
+
 });
 
-/* ================= RENDER ================= */
-function loadProjects(){
+});
 
+/* RENDER PROJECTS */
+function render(){
+
+let grid = document.getElementById("grid");
 grid.innerHTML="";
 
-if(projects.length===0){
-grid.innerHTML="<p>No reports uploaded yet</p>";
-return;
-}
+projects.forEach(p=>{
 
-projects.forEach((p,i)=>{
-
-const card=document.createElement('div');
-card.className="project-card";
-
-card.innerHTML=`
+grid.innerHTML += `
+<div class="project">
 <img src="${p.image}">
-<div class="project-content">
+<div class="project-body">
 
-<div class="meta">${p.category} • ${p.date}</div>
+<div class="small">${p.category} • ${p.date}</div>
+<h3>${p.title}</h3>
+<p>${p.desc}</p>
 
-<div class="project-title">${p.title}</div>
-
-<div class="project-desc">${p.desc}</div>
-
-<div style="margin-top:10px;">
-${p.tools.map(t=>`<span class="tool">${t}</span>`).join('')}
+<div>
+${p.tools.map(t=>`<span class="tag">${t}</span>`).join("")}
 </div>
 
+</div>
 </div>
 `;
 
-grid.appendChild(card);
 });
+
 }
+
+/* OVERVIEW LOGIC */
+function overview(){
+
+document.getElementById("totalProjects").innerText = projects.length;
+
+document.getElementById("powerbiCount").innerText =
+projects.filter(p=>p.category==="Power BI").length;
+
+document.getElementById("excelCount").innerText =
+projects.filter(p=>p.category==="Excel").length;
+
+document.getElementById("sqlCount").innerText =
+projects.filter(p=>p.category==="SQL").length;
+
+if(projects.length>0){
+document.getElementById("latestDate").innerText =
+projects[projects.length-1].date;
+}
+
+}
+
+/* INIT */
+render();
+overview();
 
 </script>
 
