@@ -848,9 +848,13 @@ function saveProjects(projects){
     // Save index without src (too big for single key)
     const index = projects.map(p=>({...p,src:undefined}));
     localStorage.setItem(STORAGE_KEY, JSON.stringify(index));
+ 
     // Save each image separately
     projects.forEach(p=>{
-      if(p.src) localStorage.setItem(IMG_PREFIX+p.id, p.src);
+      // Only save if src exists and is a base64 string (to avoid overwriting with undefined)
+      if(p.src && p.src.startsWith('data:image')) {
+        localStorage.setItem(IMG_PREFIX+p.id, p.src);
+      }
     });
   }catch(e){console.warn('Storage write failed',e)}
 }
@@ -906,8 +910,7 @@ function showPage(id){
   if(id==='home') renderHomePreview();
 }
  
-showPage('home');
- 
+// Initial page show handled in DOMContentLoaded
 const ham=document.getElementById('ham'),drawer=document.getElementById('drawer');
 ham.addEventListener('click',()=>drawer.classList.toggle('open'));
 function cd(){drawer.classList.remove('open')}
@@ -1044,7 +1047,7 @@ document.getElementById('mCancel').addEventListener('click',()=>{
 /* ═══════════════════════════════════════════
    CREATE CARD
 ═══════════════════════════════════════════ */
-function createCard(src, existingProject){
+function createCard(src, existingProject, batchMode = false){
   let proj;
   if(existingProject){
     proj = existingProject;
@@ -1062,22 +1065,21 @@ function createCard(src, existingProject){
     projects.push(proj);
     saveProjects(projects);
   }
- 
+
   const {id,title,cat,desc,hl1,hl2,hl3,tools,year}=proj;
   const tc=tagClasses[cat]||'t-dim';
   const toolTagsStr=tools?tools.split(',').map(t=>`<span class="tag t-em">${escHtml(t.trim())}</span>`).join(''):'';
   const shortDesc=desc.length>105?desc.slice(0,102)+'…':desc;
   const safeSrc=src;
- 
-  // Strip thumb
+
+  // Create Thumb
   const thumb=document.createElement('div');
   thumb.className='s-thumb';thumb.dataset.cardId=id;
   const sn=title.length>16?title.slice(0,14)+'…':title;
   thumb.innerHTML=`<img src="${safeSrc}" alt="${escHtml(title)}"/><div class="s-label">${escHtml(sn)}</div><button class="s-del" onclick="removeCard('${id}',this.closest('.s-thumb'))" title="Remove">×</button>`;
   thumb.querySelector('img').onclick=()=>openLightbox(safeSrc);
-  strip.appendChild(thumb);
- 
-  // Card
+
+  // Create Card
   const card=document.createElement('div');
   card.className='rp-card';card.dataset.id=id;
   card.innerHTML=`
@@ -1085,7 +1087,7 @@ function createCard(src, existingProject){
       <img src="${safeSrc}" alt="${escHtml(title)}" onclick="openLightbox(this.src)"/>
       <div class="rp-img-overlay"></div>
       <div class="rp-badge"><span class="tag ${tc}">${escHtml(cat)}</span></div>
-      <button class="rp-expand" onclick="openLightbox('${id}__lb')">⤢</button>
+      <button class="rp-expand">⤢</button>
     </div>
     <div class="rp-body">
       <div class="rp-meta"><span class="rp-type">${escHtml(cat)}</span><span class="rp-yr">${escHtml(year)}</span></div>
@@ -1113,29 +1115,26 @@ function createCard(src, existingProject){
       <div class="rp-tools">${toolTagsStr}</div>
       <button class="rp-del" onclick="removeCard('${id}',null)">Remove</button>
     </div>`;
- 
-  // Fix expand button to use src lookup
-  card.querySelector('.rp-expand').onclick=()=>{
-    const p=projects.find(x=>x.id===id);
-    if(p) openLightbox(p.src);
-  };
- 
-  if(!existingProject){
-    card.style.opacity='0';card.style.transform='translateY(24px)';
+
+  card.querySelector('.rp-expand').onclick=()=>openLightbox(safeSrc);
+
+  if(!batchMode) {
+    strip.appendChild(thumb);
     reportGrid.appendChild(card);
-    requestAnimationFrame(()=>{
-      card.style.transition='opacity .5s ease,transform .5s ease';
-      card.style.opacity='1';card.style.transform='none';
-    });
-  } else {
-    reportGrid.appendChild(card);
+    if(!existingProject){
+      card.style.opacity='0';card.style.transform='translateY(24px)';
+      requestAnimationFrame(()=>{
+        card.style.transition='opacity .5s ease,transform .5s ease';
+        card.style.opacity='1';card.style.transform='none';
+      });
+    }
+    renderComments(id);
+    checkEmpty();
+    fileInput.value='';
+    renderHomePreview();
   }
- 
-  // Restore comments count
-  renderComments(id);
-  checkEmpty();
-  fileInput.value='';
-  renderHomePreview();
+
+  return {thumb, card};
 }
  
 /* ── REMOVE CARD ── */
@@ -1242,14 +1241,73 @@ document.addEventListener('keydown',e=>{
 /* ═══════════════════════════════════════════
    RESTORE SAVED PROJECTS ON LOAD
 ═══════════════════════════════════════════ */
-(function restoreFromStorage(){
-  if(!projects.length) return;
-  projects.forEach(proj=>{
-    if(proj.src) createCard(proj.src, proj);
+function restoreFromStorage(){
+  const strip = document.getElementById('uploadedStrip');
+  const reportGrid = document.getElementById('reportGrid');
+  if(!strip || !reportGrid) return;
+
+  // Clear UI
+  strip.innerHTML = '';
+  reportGrid.querySelectorAll('.rp-card').forEach(c => c.remove());
+
+  if(!projects || !projects.length) {
+    checkEmpty();
+    renderHomePreview();
+    return;
+  }
+
+  // Use fragments for batch DOM updates
+  const stripFrag = document.createDocumentFragment();
+  const gridFrag = document.createDocumentFragment();
+  
+  projects.forEach(proj => {
+    if(proj.src) {
+      const {thumb, card} = createCard(proj.src, proj, true);
+      stripFrag.appendChild(thumb);
+      gridFrag.appendChild(card);
+    }
   });
+
+  strip.appendChild(stripFrag);
+  
+  // Apply staggered entrance for batch loaded cards
+  const cards = Array.from(gridFrag.querySelectorAll('.rp-card'));
+  cards.forEach((card, i) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+  });
+
+  reportGrid.appendChild(gridFrag);
+
+  // Trigger animations
+  requestAnimationFrame(() => {
+    cards.forEach((card, i) => {
+      setTimeout(() => {
+        card.style.transition = 'opacity .6s cubic-bezier(0.2, 0.8, 0.2, 1), transform .6s cubic-bezier(0.2, 0.8, 0.2, 1)';
+        card.style.opacity = '1';
+        card.style.transform = 'none';
+      }, i * 80);
+    });
+  });
+
+  // Initialize components for all restored items
+  projects.forEach(p => renderComments(p.id));
+  
   checkEmpty();
   renderHomePreview();
-})();
+}
+
+// Run on load
+document.addEventListener('DOMContentLoaded', () => {
+  restoreFromStorage();
+  // Ensure we are on the right page if hash exists (optional SPA enhancement)
+  const hash = window.location.hash.replace('#','');
+  if(PAGES.includes(hash)) {
+    showPage(hash);
+  } else {
+    showPage('home');
+  }
+});
 </script>
 </body>
 </html>
