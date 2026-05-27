@@ -5,12 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Idowu Joshua — Data Analyst Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,800;1,9..144,700;1,9..144,800&family=Cabinet+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
- 
-<!-- Firebase v10 (modular via CDN compat shim) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
- 
 <style>
 :root{
   --ink:#07080a;--ink2:#0d0f13;--ink3:#13161c;--ink4:#191d26;--ink5:#1f232e;
@@ -369,14 +363,6 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
 .sync-dot.syncing{background:var(--gold);animation:pulse 0.8s ease-in-out infinite}
 .sync-dot.error{background:var(--rose)}
  
-/* UPLOAD PROGRESS */
-.upload-progress{position:fixed;bottom:24px;right:24px;z-index:800;background:var(--ink2);border:1px solid var(--rim2);border-radius:var(--r2);padding:16px 20px;min-width:260px;box-shadow:0 20px 60px rgba(0,0,0,.5);display:none}
-.upload-progress.visible{display:block}
-.up-prog-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
-.up-prog-bar-out{height:3px;background:var(--rim2);border-radius:2px;overflow:hidden;margin-bottom:8px}
-.up-prog-bar-in{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width .3s ease;width:0%}
-.up-prog-text{font-size:11px;color:var(--text2)}
- 
 /* RESPONSIVE */
 @media(max-width:1060px){
   .hero-layout{grid-template-columns:1fr;padding:0}
@@ -452,7 +438,7 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
           View My Reports
         </a>
         <a href="javascript:void(0)" onclick="showPage('contact')" class="btn btn-outline">Get In Touch</a>
-        <a href="#" class="btn btn-em" onclick="alert('Please replace this link with your actual Resume URL.')">
+        <a href="#" class="btn btn-em" onclick="alert('Please replace this link with your actual Resume URL in the code.')">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download CV
         </a>
@@ -613,12 +599,12 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
   <div class="wrap">
     <div class="eyebrow reveal">Portfolio</div>
     <h2 class="heading reveal">Reports & <em>Dashboards</em></h2>
-    <p class="reveal" style="color:var(--text3);font-size:13.5px;max-width:560px;margin-bottom:40px;line-height:1.9">Upload your Power BI dashboards and Excel reports below. They sync automatically across all your devices via Firebase — mobile, tablet, and desktop.</p>
+    <p class="reveal" style="color:var(--text3);font-size:13.5px;max-width:560px;margin-bottom:40px;line-height:1.9">Upload your Power BI dashboards and Excel reports below. They sync automatically across all your devices — mobile, tablet, and desktop.</p>
  
     <!-- Sync Status Bar -->
     <div class="sync-status-bar reveal" id="syncStatusBar">
       <div class="sync-dot" id="syncDot"></div>
-      <span id="syncStatusText">Connecting to Firebase…</span>
+      <span id="syncStatusText">Connecting to cloud storage…</span>
     </div>
  
     <div class="filter-wrap reveal" style="margin-bottom:32px;display:flex;gap:10px;flex-wrap:wrap">
@@ -641,7 +627,7 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
         <input type="file" id="fileInput" accept="image/*" multiple/>
         <div class="dz-ico">📂</div>
         <div class="dz-title">Drag & drop your report screenshots here</div>
-        <div class="dz-sub">PNG, JPG, JPEG — syncs across all devices via Firebase Storage</div>
+        <div class="dz-sub">PNG, JPG, JPEG — syncs across all your devices automatically</div>
         <div class="dz-btn">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           Browse Files
@@ -755,7 +741,7 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
           </div>
           <div class="fg" style="margin-bottom:24px"><label class="fl2">Message</label><textarea class="ft2" name="message" placeholder="How can I help you?" style="height:120px" required></textarea></div>
           <button type="submit" class="btn btn-gold" style="width:100%">Send Message</button>
-          <p style="font-size:10px;color:var(--text3);margin-top:12px;text-align:center">Powered by Formspree — update the form ID in the code.</p>
+          <p style="font-size:10px;color:var(--text3);margin-top:12px;text-align:center">Powered by Formspree — please update the form ID in the code.</p>
         </form>
       </div>
     </div>
@@ -832,17 +818,19 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
   <img id="lbImg" src="" alt="Report preview"/>
 </div>
  
-<!-- UPLOAD PROGRESS TOAST -->
-<div class="upload-progress" id="uploadProgressToast">
-  <div class="up-prog-title">Uploading to Firebase…</div>
-  <div class="up-prog-bar-out"><div class="up-prog-bar-in" id="uploadProgressBar"></div></div>
-  <div class="up-prog-text" id="uploadProgressText">Preparing…</div>
-</div>
- 
-<script>
+<script type="module">
 /* ═══════════════════════════════════════════
-   FIREBASE INITIALISATION
+   FIREBASE FIRESTORE — real-time cross-device
+   Reports uploaded on phone appear instantly
+   on laptop and any other device.
 ═══════════════════════════════════════════ */
+import { initializeApp }                          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, getDoc, setDoc,
+         deleteDoc, onSnapshot, collection,
+         query, orderBy, getDocs }              from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getStorage, ref, uploadString,
+         getDownloadURL, deleteObject }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
+ 
 const firebaseConfig = {
   apiKey:            "AIzaSyA9-TjKC-YTIE8bc0QGjfYE1D1Azb6Xk0g",
   authDomain:        "idowu-joshua.firebaseapp.com",
@@ -853,130 +841,122 @@ const firebaseConfig = {
   measurementId:     "G-S7WZDG1K3F"
 };
  
-firebase.initializeApp(firebaseConfig);
-const db      = firebase.firestore();
-const storage = firebase.storage();
+const app      = initializeApp(firebaseConfig);
+const db       = getFirestore(app);
+const fbStore  = getStorage(app);
  
-// Firestore collection / doc references
-const PROJECTS_COL  = db.collection('projects');
-const COMMENTS_DOC  = db.collection('meta').doc('comments');
-const AVATAR_DOC    = db.collection('meta').doc('avatar');
- 
-/* ═══════════════════════════════════════════
-   SYNC STATUS UI
-═══════════════════════════════════════════ */
+/* ── Sync status UI ── */
 function setSyncStatus(state, text) {
   const dot  = document.getElementById('syncDot');
   const span = document.getElementById('syncStatusText');
   if (!dot || !span) return;
-  dot.className = 'sync-dot ' + state;
+  dot.className  = 'sync-dot ' + state;
   span.textContent = text;
 }
  
-/* ═══════════════════════════════════════════
-   FIRESTORE  helpers
-═══════════════════════════════════════════ */
-async function fbSaveProject(proj) {
-  // proj.src is the Firebase Storage download URL (not base64)
-  const { src, ...meta } = proj;
-  await PROJECTS_COL.doc(proj.id).set({ ...meta, imageUrl: src, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+/* ── Upload image to Firebase Storage, return download URL ── */
+async function uploadImage(id, base64DataUrl) {
+  const imgRef = ref(fbStore, `portfolio/images/${id}`);
+  await uploadString(imgRef, base64DataUrl, 'data_url');
+  return await getDownloadURL(imgRef);
 }
  
-async function fbDeleteProject(id) {
-  await PROJECTS_COL.doc(id).delete();
-  // Delete image from Storage
-  try { await storage.ref('reports/' + id).delete(); } catch (e) { /* already gone */ }
-}
- 
-async function fbLoadProjects() {
-  const snap = await PROJECTS_COL.orderBy('updatedAt', 'asc').get();
-  return snap.docs.map(d => ({ ...d.data(), id: d.id, src: d.data().imageUrl }));
-}
- 
-async function fbSaveComments(obj) {
-  await COMMENTS_DOC.set({ data: JSON.stringify(obj) });
-}
- 
-async function fbLoadComments() {
+/* ── Delete image from Firebase Storage ── */
+async function removeImage(id) {
   try {
-    const snap = await COMMENTS_DOC.get();
-    if (!snap.exists) return {};
-    return JSON.parse(snap.data().data || '{}');
+    await deleteObject(ref(fbStore, `portfolio/images/${id}`));
+  } catch (e) { /* already deleted or never uploaded */ }
+}
+ 
+/* ── Save a project doc to Firestore (no image src — stored in Storage) ── */
+async function saveProjectDoc(proj) {
+  const { src, ...meta } = proj; // don't store base64 in Firestore
+  await setDoc(doc(db, 'portfolio', proj.id), meta);
+}
+ 
+/* ── Delete a project doc ── */
+async function deleteProjectDoc(id) {
+  await deleteDoc(doc(db, 'portfolio', id));
+}
+ 
+/* ── Save comments doc ── */
+async function saveComments(commentsObj) {
+  await setDoc(doc(db, 'portfolio', '__comments__'), commentsObj);
+}
+ 
+/* ── Load comments ── */
+async function loadComments() {
+  try {
+    const snap = await getDoc(doc(db, 'portfolio', '__comments__'));
+    return snap.exists() ? snap.data() : {};
   } catch (e) { return {}; }
 }
  
-/* ═══════════════════════════════════════════
-   FIREBASE STORAGE  image upload
-   Returns the public download URL.
-═══════════════════════════════════════════ */
-async function uploadImageToStorage(id, dataUrl) {
-  const toast    = document.getElementById('uploadProgressToast');
-  const bar      = document.getElementById('uploadProgressBar');
-  const txt      = document.getElementById('uploadProgressText');
-  toast.classList.add('visible');
+/* ── Save avatar ── */
+async function saveAvatar(base64) {
+  await setDoc(doc(db, 'portfolio', '__avatar__'), { data: base64 });
+}
  
-  // Convert data URL → Blob
-  const res  = await fetch(dataUrl);
-  const blob = await res.blob();
+/* ── Load avatar ── */
+async function loadAvatar() {
+  try {
+    const snap = await getDoc(doc(db, 'portfolio', '__avatar__'));
+    if (snap.exists() && snap.data().data) {
+      const img = document.getElementById('avatarImg');
+      img.src = snap.data().data; img.classList.add('show');
+      document.getElementById('avInit').style.display = 'none';
+    }
+  } catch (e) {}
+}
  
-  const ref      = storage.ref('reports/' + id);
-  const task     = ref.put(blob, { contentType: blob.type });
+/* ── Load all projects once (with image URLs from Storage) ── */
+async function loadAllProjects() {
+  setSyncStatus('syncing', 'Loading reports from Firebase…');
+  try {
+    const snap = await getDocs(collection(db, 'portfolio'));
+    const results = [];
+    for (const d of snap.docs) {
+      if (d.id.startsWith('__')) continue; // skip meta docs
+      const data = d.data();
+      // Fetch image URL from Storage
+      let src = '';
+      try {
+        src = await getDownloadURL(ref(fbStore, `portfolio/images/${d.id}`));
+      } catch (e) { src = data.src || ''; } // fallback if stored inline
+      results.push({ ...data, id: d.id, src });
+    }
+    // Sort by creation order (id is timestamp-based)
+    results.sort((a, b) => a.id.localeCompare(b.id));
+    setSyncStatus('synced', `✓ Firebase synced — ${results.length} report${results.length !== 1 ? 's' : ''} · updates instantly across all devices`);
+    return results;
+  } catch (e) {
+    setSyncStatus('error', '⚠ Firebase error: ' + e.message);
+    return [];
+  }
+}
  
-  return new Promise((resolve, reject) => {
-    task.on('state_changed',
-      snap => {
-        const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
-        bar.style.width   = pct + '%';
-        txt.textContent   = `Uploading… ${pct}%`;
-      },
-      err => { toast.classList.remove('visible'); reject(err); },
-      async () => {
-        const url = await task.snapshot.ref.getDownloadURL();
-        bar.style.width  = '100%';
-        txt.textContent  = 'Upload complete ✓';
-        setTimeout(() => { toast.classList.remove('visible'); bar.style.width = '0%'; }, 1800);
-        resolve(url);
-      }
-    );
+/* ── Real-time listener: when Firestore changes on ANY device, re-render ── */
+function startRealtimeSync() {
+  const q = collection(db, 'portfolio');
+  onSnapshot(q, async (snapshot) => {
+    // Only re-render if there's an actual remote change (not our own write)
+    const newIds = snapshot.docs
+      .filter(d => !d.id.startsWith('__'))
+      .map(d => d.id)
+      .sort();
+    const currentIds = projects.map(p => p.id).sort();
+    const changed = JSON.stringify(newIds) !== JSON.stringify(currentIds);
+    if (changed && projects.length > 0) {
+      // Another device added/removed a report — reload silently
+      setSyncStatus('syncing', 'New changes detected — syncing…');
+      projects = await loadAllProjects();
+      rebuildGrid();
+      renderHomePreview();
+    }
   });
 }
  
-/* ═══════════════════════════════════════════
-   AVATAR  (stored as Storage file + Firestore URL)
-═══════════════════════════════════════════ */
-async function loadAvatar() {
-  try {
-    const snap = await AVATAR_DOC.get();
-    if (snap.exists && snap.data().url) {
-      const img = document.getElementById('avatarImg');
-      img.src = snap.data().url;
-      img.classList.add('show');
-      document.getElementById('avInit').style.display = 'none';
-    }
-  } catch (e) { /* no avatar yet */ }
-}
  
-document.getElementById('avatarInput').addEventListener('change', async function () {
-  if (!this.files[0]) return;
-  setSyncStatus('syncing', 'Uploading avatar…');
-  const reader = new FileReader();
-  reader.onload = async e => {
-    try {
-      const blob = await (await fetch(e.target.result)).blob();
-      const ref  = storage.ref('avatar/profile');
-      await ref.put(blob, { contentType: blob.type });
-      const url  = await ref.getDownloadURL();
-      await AVATAR_DOC.set({ url });
-      const img = document.getElementById('avatarImg');
-      img.src = url; img.classList.add('show');
-      document.getElementById('avInit').style.display = 'none';
-      setSyncStatus('synced', 'Avatar synced across all devices');
-    } catch (err) {
-      setSyncStatus('error', 'Avatar upload failed: ' + err.message);
-    }
-  };
-  reader.readAsDataURL(this.files[0]);
-});
  
 /* ═══════════════════════════════════════════
    RUNTIME STATE
@@ -990,7 +970,10 @@ let comments = {};
 const PAGES = ['home','about','skills','reports','experience','contact'];
  
 function showPage(id) {
-  PAGES.forEach(p => { const el = document.getElementById(p); if (el) el.classList.remove('active'); });
+  PAGES.forEach(p => {
+    const el = document.getElementById(p);
+    if (el) el.classList.remove('active');
+  });
   const ft = document.getElementById('mainFooter');
   if (ft) ft.style.display = (id === 'contact' || id === 'home') ? 'flex' : 'none';
   const target = document.getElementById(id);
@@ -1014,23 +997,38 @@ function observeReveals() { document.querySelectorAll('.reveal:not(.vis)').forEa
 observeReveals();
  
 /* ═══════════════════════════════════════════
+   AVATAR
+═══════════════════════════════════════════ */
+document.getElementById('avatarInput').addEventListener('change', function () {
+  if (!this.files[0]) return;
+  const r = new FileReader();
+  r.onload = async e => {
+    const img = document.getElementById('avatarImg');
+    img.src = e.target.result; img.classList.add('show');
+    document.getElementById('avInit').style.display = 'none';
+    await saveAvatar(e.target.result);
+  };
+  r.readAsDataURL(this.files[0]);
+});
+ 
+/* ═══════════════════════════════════════════
    COMMENTS
 ═══════════════════════════════════════════ */
 function toggleComments(btn, id) { btn.classList.toggle('open'); document.getElementById('cb-' + id).classList.toggle('open'); }
  
 async function postComment(id) {
-  const inp = document.getElementById('ci-' + id);
+  const inp = document.getElementById('ci-' + id) || document.getElementById('dm-ci-' + id);
   if (!inp) return;
   const txt = inp.value.trim(); if (!txt) return;
   if (!comments[id]) comments[id] = [];
   comments[id].push({ name: 'You', text: txt, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
-  await fbSaveComments(comments);
+  await saveComments(comments);
   renderComments(id); inp.value = '';
 }
  
 async function deleteComment(id, idx) {
   comments[id].splice(idx, 1);
-  await fbSaveComments(comments);
+  await saveComments(comments);
   renderComments(id);
 }
  
@@ -1053,7 +1051,7 @@ function renderComments(id) {
 function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
  
 /* ═══════════════════════════════════════════
-   UPLOAD FLOW
+   UPLOAD
 ═══════════════════════════════════════════ */
 let pendingFiles = [], pendingIdx = 0;
 const dropZone   = document.getElementById('dropZone');
@@ -1071,20 +1069,21 @@ const tagClasses = {
 function checkEmpty() {
   const cards = reportGrid.querySelectorAll('.rp-card');
   emptyState.style.display = cards.length === 0 ? 'flex' : 'none';
-  const el = document.getElementById('uploadCount');
-  const n  = projects.length;
-  if (el) el.textContent = `${n} image${n !== 1 ? 's' : ''} uploaded`;
+  updateCount();
   const stat = document.getElementById('home-stat-projects');
   if (stat) stat.textContent = projects.length;
 }
  
-dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('hovered'); });
-dropZone.addEventListener('dragleave', ()  => dropZone.classList.remove('hovered'));
+function updateCount() {
+  const el = document.getElementById('uploadCount');
+  const n  = projects.length;
+  if (el) el.textContent = `${n} image${n !== 1 ? 's' : ''} uploaded`;
+}
+ 
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('hovered'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('hovered'));
 dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('hovered'); startUpload(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'))); });
 fileInput.addEventListener('change', () => { if (fileInput.files.length) startUpload(Array.from(fileInput.files)); });
- 
-// Store the pending data URL for the current modal
-let _pendingDataUrl = '';
  
 function startUpload(files) { pendingFiles = files; pendingIdx = 0; openNextModal(); }
  
@@ -1093,8 +1092,8 @@ function openNextModal() {
   const file = pendingFiles[pendingIdx++];
   const r = new FileReader();
   r.onload = e => {
-    _pendingDataUrl = e.target.result;
-    document.getElementById('mPreview').innerHTML = `<img src="${_pendingDataUrl}" style="width:100%;height:100%;object-fit:cover"/>`;
+    const src = e.target.result;
+    document.getElementById('mPreview').innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover"/>`;
     document.getElementById('mTitle').value  = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
     document.getElementById('mDesc').value   = '';
     document.getElementById('mTools').value  = 'Power BI, Excel';
@@ -1103,9 +1102,9 @@ function openNextModal() {
     document.getElementById('mHl2').value    = '';
     document.getElementById('mHl3').value    = '';
     document.getElementById('modalBg').classList.add('open');
-    document.getElementById('mSave').onclick = async () => {
+    document.getElementById('mSave').onclick = () => {
+      createCard(src);
       document.getElementById('modalBg').classList.remove('open');
-      await saveAndRenderCard(_pendingDataUrl);
       openNextModal();
     };
   };
@@ -1118,72 +1117,21 @@ document.getElementById('mCancel').addEventListener('click', () => {
 });
  
 /* ═══════════════════════════════════════════
-   SAVE CARD  (upload image → Firestore → render)
-═══════════════════════════════════════════ */
-async function saveAndRenderCard(dataUrl) {
-  const title = document.getElementById('mTitle').value.trim() || 'Untitled Report';
-  const cat   = document.getElementById('mCat').value;
-  const desc  = document.getElementById('mDesc').value.trim() || 'A data analytics report built to deliver actionable business insights.';
-  const hl1   = document.getElementById('mHl1').value.trim();
-  const hl2   = document.getElementById('mHl2').value.trim();
-  const hl3   = document.getElementById('mHl3').value.trim();
-  const tools = document.getElementById('mTools').value.trim();
-  const year  = document.getElementById('mYear').value.trim() || new Date().getFullYear().toString();
-  const id    = 'p' + Date.now();
- 
-  setSyncStatus('syncing', 'Uploading image to Firebase Storage…');
-  let imageUrl;
-  try {
-    imageUrl = await uploadImageToStorage(id, dataUrl);
-  } catch (err) {
-    setSyncStatus('error', 'Image upload failed: ' + err.message);
-    return;
-  }
- 
-  const proj = { id, title, cat, desc, hl1, hl2, hl3, tools, year, src: imageUrl };
-  projects.push(proj);
- 
-  setSyncStatus('syncing', 'Saving metadata to Firestore…');
-  try {
-    await fbSaveProject(proj);
-    setSyncStatus('synced', `Synced — ${projects.length} report${projects.length !== 1 ? 's' : ''} on Firebase`);
-  } catch (err) {
-    setSyncStatus('error', 'Firestore save failed: ' + err.message);
-  }
- 
-  const { thumb, card } = buildCardElements(proj);
-  strip.appendChild(thumb);
- 
-  card.style.opacity = '0'; card.style.transform = 'translateY(24px)';
-  reportGrid.appendChild(card);
-  requestAnimationFrame(() => {
-    card.style.transition = 'opacity .5s ease,transform .5s ease';
-    card.style.opacity = '1'; card.style.transform = 'none';
-  });
- 
-  renderComments(id);
-  checkEmpty();
-  fileInput.value = '';
-  renderHomePreview();
-}
- 
-/* ═══════════════════════════════════════════
-   BUILD CARD DOM  (used by both new & loaded)
+   BUILD CARD DOM ELEMENTS (no save, no async)
+   Used both on initial load and real-time sync
 ═══════════════════════════════════════════ */
 function buildCardElements(proj) {
   const { id, title, cat, desc, hl1, hl2, hl3, tools, year, src } = proj;
   const tc          = tagClasses[cat] || 't-dim';
   const toolTagsStr = tools ? tools.split(',').map(t => `<span class="tag t-em">${escHtml(t.trim())}</span>`).join('') : '';
-  const shortDesc   = desc.length > 105 ? desc.slice(0, 102) + '…' : desc;
+  const shortDesc   = desc && desc.length > 105 ? desc.slice(0, 102) + '…' : (desc || '');
  
-  // Thumb
   const thumb = document.createElement('div');
   thumb.className = 's-thumb'; thumb.dataset.cardId = id;
   const sn = title.length > 16 ? title.slice(0, 14) + '…' : title;
   thumb.innerHTML = `<img src="${src}" alt="${escHtml(title)}"/><div class="s-label">${escHtml(sn)}</div><button class="s-del" onclick="removeCard('${id}',this.closest('.s-thumb'))" title="Remove">×</button>`;
   thumb.querySelector('img').onclick = () => openLightbox(src);
  
-  // Card
   const card = document.createElement('div');
   card.className = 'rp-card'; card.dataset.id = id;
   card.innerHTML = `
@@ -1224,6 +1172,56 @@ function buildCardElements(proj) {
   return { thumb, card };
 }
  
+/* ═══════════════════════════════════════════
+   CREATE CARD — saves to Firebase then renders
+═══════════════════════════════════════════ */
+async function createCard(src, existingProject, batchMode = false) {
+  let proj;
+  if (existingProject) {
+    proj = existingProject;
+  } else {
+    const title = document.getElementById('mTitle').value.trim() || 'Untitled Report';
+    const cat   = document.getElementById('mCat').value;
+    const desc  = document.getElementById('mDesc').value.trim() || 'A data analytics report built to deliver actionable business insights.';
+    const hl1   = document.getElementById('mHl1').value.trim();
+    const hl2   = document.getElementById('mHl2').value.trim();
+    const hl3   = document.getElementById('mHl3').value.trim();
+    const tools = document.getElementById('mTools').value.trim();
+    const year  = document.getElementById('mYear').value.trim() || new Date().getFullYear().toString();
+    const id    = 'p' + Date.now();
+ 
+    setSyncStatus('syncing', 'Uploading image to Firebase…');
+    let imageUrl = src;
+    try {
+      imageUrl = await uploadImage(id, src);
+    } catch (e) {
+      console.warn('Image upload failed, using base64 fallback', e);
+    }
+ 
+    proj = { id, title, cat, desc, hl1, hl2, hl3, tools, year, src: imageUrl };
+    projects.push(proj);
+ 
+    setSyncStatus('syncing', 'Saving report to Firebase…');
+    await saveProjectDoc(proj);
+    setSyncStatus('synced', `✓ Saved — visible on all your devices instantly`);
+  }
+ 
+  const { thumb, card } = buildCardElements(proj);
+ 
+  strip.appendChild(thumb);
+  reportGrid.appendChild(card);
+  card.style.opacity = '0'; card.style.transform = 'translateY(24px)';
+  requestAnimationFrame(() => {
+    card.style.transition = 'opacity .5s ease,transform .5s ease';
+    card.style.opacity = '1'; card.style.transform = 'none';
+  });
+  renderComments(proj.id);
+  checkEmpty();
+  fileInput.value = '';
+  renderHomePreview();
+  return { thumb, card };
+}
+ 
 /* REMOVE CARD */
 async function removeCard(id, thumbEl) {
   const card = document.querySelector(`.rp-card[data-id="${id}"]`);
@@ -1232,12 +1230,8 @@ async function removeCard(id, thumbEl) {
   if (t) { t.style.transition = 'opacity .28s'; t.style.opacity = '0'; setTimeout(() => t.remove(), 280); }
   projects = projects.filter(p => p.id !== id);
   setSyncStatus('syncing', 'Deleting from Firebase…');
-  try {
-    await fbDeleteProject(id);
-    setSyncStatus('synced', `Synced — ${projects.length} report${projects.length !== 1 ? 's' : ''} on Firebase`);
-  } catch (err) {
-    setSyncStatus('error', 'Delete failed: ' + err.message);
-  }
+  await Promise.all([deleteProjectDoc(id), removeImage(id)]);
+  setSyncStatus('synced', `✓ Deleted — removed from all devices`);
   checkEmpty();
   renderHomePreview();
 }
@@ -1345,65 +1339,73 @@ document.addEventListener('keydown', e => {
 });
  
 /* ═══════════════════════════════════════════
-   BOOT — load everything from Firebase on start
+   REBUILD GRID (used by realtime sync)
+═══════════════════════════════════════════ */
+function rebuildGrid() {
+  const stripEl = document.getElementById('uploadedStrip');
+  const gridEl  = document.getElementById('reportGrid');
+  stripEl.innerHTML = '';
+  gridEl.querySelectorAll('.rp-card').forEach(c => c.remove());
+ 
+  const stripFrag = document.createDocumentFragment();
+  const gridFrag  = document.createDocumentFragment();
+ 
+  projects.forEach(proj => {
+    if (!proj.src) return;
+    const { thumb, card } = buildCardElements(proj);
+    stripFrag.appendChild(thumb);
+    gridFrag.appendChild(card);
+  });
+ 
+  stripEl.appendChild(stripFrag);
+  gridEl.appendChild(gridFrag);
+  projects.forEach(p => renderComments(p.id));
+  checkEmpty();
+}
+ 
+/* ═══════════════════════════════════════════
+   BOOT
 ═══════════════════════════════════════════ */
 async function boot() {
-  setSyncStatus('syncing', 'Connecting to Firebase…');
- 
-  try {
-    [projects, comments] = await Promise.all([fbLoadProjects(), fbLoadComments()]);
-  } catch (err) {
-    setSyncStatus('error', 'Firebase connection failed: ' + err.message);
-    projects = []; comments = {};
-  }
- 
+  [projects, comments] = await Promise.all([loadAllProjects(), loadComments()]);
   await loadAvatar();
  
-  // Clear and re-render grid
-  strip.innerHTML = '';
-  reportGrid.querySelectorAll('.rp-card').forEach(c => c.remove());
+  rebuildGrid();
  
-  if (projects.length) {
-    const stripFrag = document.createDocumentFragment();
-    const gridFrag  = document.createDocumentFragment();
- 
-    for (const proj of projects) {
-      if (proj.src) {
-        const { thumb, card } = buildCardElements(proj);
-        stripFrag.appendChild(thumb);
-        gridFrag.appendChild(card);
-      }
-    }
- 
-    strip.appendChild(stripFrag);
- 
-    const cards = Array.from(gridFrag.querySelectorAll('.rp-card'));
-    cards.forEach(card => { card.style.opacity = '0'; card.style.transform = 'translateY(20px)'; });
-    reportGrid.appendChild(gridFrag);
-    requestAnimationFrame(() => {
-      cards.forEach((card, i) => {
-        setTimeout(() => {
-          card.style.transition = 'opacity .6s cubic-bezier(0.2,0.8,0.2,1),transform .6s cubic-bezier(0.2,0.8,0.2,1)';
-          card.style.opacity    = '1';
-          card.style.transform  = 'none';
-        }, i * 80);
-      });
+  // Stagger entrance animation
+  const cards = Array.from(document.querySelectorAll('.rp-card'));
+  cards.forEach(card => { card.style.opacity = '0'; card.style.transform = 'translateY(20px)'; });
+  requestAnimationFrame(() => {
+    cards.forEach((card, i) => {
+      setTimeout(() => {
+        card.style.transition = 'opacity .6s cubic-bezier(0.2,0.8,0.2,1),transform .6s cubic-bezier(0.2,0.8,0.2,1)';
+        card.style.opacity    = '1';
+        card.style.transform  = 'none';
+      }, i * 80);
     });
+  });
  
-    projects.forEach(p => renderComments(p.id));
-    setSyncStatus('synced', `Synced — ${projects.length} report${projects.length !== 1 ? 's' : ''} loaded from Firebase`);
-  } else {
-    setSyncStatus('synced', 'Firebase ready — upload your first report');
-  }
- 
-  checkEmpty();
   renderHomePreview();
+ 
+  // Start listening for changes from other devices
+  startRealtimeSync();
  
   const hash = window.location.hash.replace('#', '');
   showPage(PAGES.includes(hash) ? hash : 'home');
 }
  
 document.addEventListener('DOMContentLoaded', boot);
+ 
+/* ── Expose to global scope (required because script is type=module) ── */
+window.showPage       = showPage;
+window.openDetail     = openDetail;
+window.openLightbox   = openLightbox;
+window.removeCard     = removeCard;
+window.filterProjects = filterProjects;
+window.toggleComments = toggleComments;
+window.postComment    = postComment;
+window.deleteComment  = deleteComment;
+window.cd             = cd;
 </script>
 </body>
 </html>
