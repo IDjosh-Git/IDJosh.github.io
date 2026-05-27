@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Idowu Joshua — Data Analyst Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,800;1,9..144,700;1,9..144,800&family=Cabinet+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+ 
+<!-- Firebase v10 (modular via CDN compat shim) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+ 
 <style>
 :root{
   --ink:#07080a;--ink2:#0d0f13;--ink3:#13161c;--ink4:#191d26;--ink5:#1f232e;
@@ -363,6 +369,14 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
 .sync-dot.syncing{background:var(--gold);animation:pulse 0.8s ease-in-out infinite}
 .sync-dot.error{background:var(--rose)}
  
+/* UPLOAD PROGRESS */
+.upload-progress{position:fixed;bottom:24px;right:24px;z-index:800;background:var(--ink2);border:1px solid var(--rim2);border-radius:var(--r2);padding:16px 20px;min-width:260px;box-shadow:0 20px 60px rgba(0,0,0,.5);display:none}
+.upload-progress.visible{display:block}
+.up-prog-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.up-prog-bar-out{height:3px;background:var(--rim2);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.up-prog-bar-in{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width .3s ease;width:0%}
+.up-prog-text{font-size:11px;color:var(--text2)}
+ 
 /* RESPONSIVE */
 @media(max-width:1060px){
   .hero-layout{grid-template-columns:1fr;padding:0}
@@ -438,7 +452,7 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
           View My Reports
         </a>
         <a href="javascript:void(0)" onclick="showPage('contact')" class="btn btn-outline">Get In Touch</a>
-        <a href="#" class="btn btn-em" onclick="alert('Please replace this link with your actual Resume URL in the code.')">
+        <a href="#" class="btn btn-em" onclick="alert('Please replace this link with your actual Resume URL.')">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download CV
         </a>
@@ -599,12 +613,12 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
   <div class="wrap">
     <div class="eyebrow reveal">Portfolio</div>
     <h2 class="heading reveal">Reports & <em>Dashboards</em></h2>
-    <p class="reveal" style="color:var(--text3);font-size:13.5px;max-width:560px;margin-bottom:40px;line-height:1.9">Upload your Power BI dashboards and Excel reports below. They sync automatically across all your devices — mobile, tablet, and desktop.</p>
+    <p class="reveal" style="color:var(--text3);font-size:13.5px;max-width:560px;margin-bottom:40px;line-height:1.9">Upload your Power BI dashboards and Excel reports below. They sync automatically across all your devices via Firebase — mobile, tablet, and desktop.</p>
  
     <!-- Sync Status Bar -->
     <div class="sync-status-bar reveal" id="syncStatusBar">
       <div class="sync-dot" id="syncDot"></div>
-      <span id="syncStatusText">Connecting to cloud storage…</span>
+      <span id="syncStatusText">Connecting to Firebase…</span>
     </div>
  
     <div class="filter-wrap reveal" style="margin-bottom:32px;display:flex;gap:10px;flex-wrap:wrap">
@@ -627,7 +641,7 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
         <input type="file" id="fileInput" accept="image/*" multiple/>
         <div class="dz-ico">📂</div>
         <div class="dz-title">Drag & drop your report screenshots here</div>
-        <div class="dz-sub">PNG, JPG, JPEG — syncs across all your devices automatically</div>
+        <div class="dz-sub">PNG, JPG, JPEG — syncs across all devices via Firebase Storage</div>
         <div class="dz-btn">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           Browse Files
@@ -741,7 +755,7 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
           </div>
           <div class="fg" style="margin-bottom:24px"><label class="fl2">Message</label><textarea class="ft2" name="message" placeholder="How can I help you?" style="height:120px" required></textarea></div>
           <button type="submit" class="btn btn-gold" style="width:100%">Send Message</button>
-          <p style="font-size:10px;color:var(--text3);margin-top:12px;text-align:center">Powered by Formspree — please update the form ID in the code.</p>
+          <p style="font-size:10px;color:var(--text3);margin-top:12px;text-align:center">Powered by Formspree — update the form ID in the code.</p>
         </form>
       </div>
     </div>
@@ -818,23 +832,39 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
   <img id="lbImg" src="" alt="Report preview"/>
 </div>
  
+<!-- UPLOAD PROGRESS TOAST -->
+<div class="upload-progress" id="uploadProgressToast">
+  <div class="up-prog-title">Uploading to Firebase…</div>
+  <div class="up-prog-bar-out"><div class="up-prog-bar-in" id="uploadProgressBar"></div></div>
+  <div class="up-prog-text" id="uploadProgressText">Preparing…</div>
+</div>
+ 
 <script>
 /* ═══════════════════════════════════════════
-   CROSS-DEVICE CLOUD STORAGE
-   Uses window.storage API (synced across all
-   devices — mobile, tablet, desktop).
-   Falls back to localStorage if unavailable.
+   FIREBASE INITIALISATION
 ═══════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey:            "AIzaSyA9-TjKC-YTIE8bc0QGjfYE1D1Azb6Xk0g",
+  authDomain:        "idowu-joshua.firebaseapp.com",
+  projectId:         "idowu-joshua",
+  storageBucket:     "idowu-joshua.firebasestorage.app",
+  messagingSenderId: "424451348388",
+  appId:             "1:424451348388:web:5fabc227b689239dd65331",
+  measurementId:     "G-S7WZDG1K3F"
+};
  
-const PROJ_INDEX_KEY = 'ij_proj_index_v4';
-const IMG_KEY_PREFIX = 'ij_img_v4_';
-const COMMENTS_KEY   = 'ij_comments_v4';
-const AVATAR_KEY     = 'ij_avatar_v4';
+firebase.initializeApp(firebaseConfig);
+const db      = firebase.firestore();
+const storage = firebase.storage();
  
-// Determine storage backend
-const useCloudStorage = typeof window.storage !== 'undefined';
+// Firestore collection / doc references
+const PROJECTS_COL  = db.collection('projects');
+const COMMENTS_DOC  = db.collection('meta').doc('comments');
+const AVATAR_DOC    = db.collection('meta').doc('avatar');
  
-// ── Sync status UI ──
+/* ═══════════════════════════════════════════
+   SYNC STATUS UI
+═══════════════════════════════════════════ */
 function setSyncStatus(state, text) {
   const dot  = document.getElementById('syncDot');
   const span = document.getElementById('syncStatusText');
@@ -843,86 +873,110 @@ function setSyncStatus(state, text) {
   span.textContent = text;
 }
  
-// ── Generic get/set wrappers ──
-async function cloudGet(key) {
-  if (useCloudStorage) {
-    try {
-      const r = await window.storage.get(key);
-      return r ? r.value : null;
-    } catch (e) { return null; }
-  } else {
-    return localStorage.getItem(key);
-  }
+/* ═══════════════════════════════════════════
+   FIRESTORE  helpers
+═══════════════════════════════════════════ */
+async function fbSaveProject(proj) {
+  // proj.src is the Firebase Storage download URL (not base64)
+  const { src, ...meta } = proj;
+  await PROJECTS_COL.doc(proj.id).set({ ...meta, imageUrl: src, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
 }
  
-async function cloudSet(key, value) {
-  if (useCloudStorage) {
-    try { await window.storage.set(key, value); } catch (e) { console.warn('cloudSet failed', e); }
-  } else {
-    try { localStorage.setItem(key, value); } catch (e) { console.warn('localStorage set failed', e); }
-  }
+async function fbDeleteProject(id) {
+  await PROJECTS_COL.doc(id).delete();
+  // Delete image from Storage
+  try { await storage.ref('reports/' + id).delete(); } catch (e) { /* already gone */ }
 }
  
-async function cloudDelete(key) {
-  if (useCloudStorage) {
-    try { await window.storage.delete(key); } catch (e) {}
-  } else {
-    localStorage.removeItem(key);
-  }
+async function fbLoadProjects() {
+  const snap = await PROJECTS_COL.orderBy('updatedAt', 'asc').get();
+  return snap.docs.map(d => ({ ...d.data(), id: d.id, src: d.data().imageUrl }));
 }
  
-// ── Save / Load projects ──
-async function saveProjects(projectsArr) {
-  setSyncStatus('syncing', 'Saving to cloud…');
-  const index = projectsArr.map(p => ({ ...p, src: undefined }));
-  await cloudSet(PROJ_INDEX_KEY, JSON.stringify(index));
-  // Save images in parallel
-  await Promise.all(projectsArr.map(p => {
-    if (p.src && p.src.startsWith('data:image')) {
-      return cloudSet(IMG_KEY_PREFIX + p.id, p.src);
+async function fbSaveComments(obj) {
+  await COMMENTS_DOC.set({ data: JSON.stringify(obj) });
+}
+ 
+async function fbLoadComments() {
+  try {
+    const snap = await COMMENTS_DOC.get();
+    if (!snap.exists) return {};
+    return JSON.parse(snap.data().data || '{}');
+  } catch (e) { return {}; }
+}
+ 
+/* ═══════════════════════════════════════════
+   FIREBASE STORAGE  image upload
+   Returns the public download URL.
+═══════════════════════════════════════════ */
+async function uploadImageToStorage(id, dataUrl) {
+  const toast    = document.getElementById('uploadProgressToast');
+  const bar      = document.getElementById('uploadProgressBar');
+  const txt      = document.getElementById('uploadProgressText');
+  toast.classList.add('visible');
+ 
+  // Convert data URL → Blob
+  const res  = await fetch(dataUrl);
+  const blob = await res.blob();
+ 
+  const ref      = storage.ref('reports/' + id);
+  const task     = ref.put(blob, { contentType: blob.type });
+ 
+  return new Promise((resolve, reject) => {
+    task.on('state_changed',
+      snap => {
+        const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+        bar.style.width   = pct + '%';
+        txt.textContent   = `Uploading… ${pct}%`;
+      },
+      err => { toast.classList.remove('visible'); reject(err); },
+      async () => {
+        const url = await task.snapshot.ref.getDownloadURL();
+        bar.style.width  = '100%';
+        txt.textContent  = 'Upload complete ✓';
+        setTimeout(() => { toast.classList.remove('visible'); bar.style.width = '0%'; }, 1800);
+        resolve(url);
+      }
+    );
+  });
+}
+ 
+/* ═══════════════════════════════════════════
+   AVATAR  (stored as Storage file + Firestore URL)
+═══════════════════════════════════════════ */
+async function loadAvatar() {
+  try {
+    const snap = await AVATAR_DOC.get();
+    if (snap.exists && snap.data().url) {
+      const img = document.getElementById('avatarImg');
+      img.src = snap.data().url;
+      img.classList.add('show');
+      document.getElementById('avInit').style.display = 'none';
     }
-    return Promise.resolve();
-  }));
-  setSyncStatus('synced', useCloudStorage
-    ? 'Synced to cloud — visible on all your devices'
-    : 'Saved locally (open this file in Claude.ai to enable cross-device sync)');
+  } catch (e) { /* no avatar yet */ }
 }
  
-async function loadProjects() {
-  setSyncStatus('syncing', 'Loading from cloud…');
-  const raw = await cloudGet(PROJ_INDEX_KEY);
-  if (!raw) {
-    setSyncStatus('synced', useCloudStorage
-      ? 'Cloud storage ready — upload your first report'
-      : 'Local storage ready');
-    return [];
-  }
-  let index;
-  try { index = JSON.parse(raw); } catch (e) { return []; }
-  // Load images in parallel
-  const withImages = await Promise.all(index.map(async p => ({
-    ...p,
-    src: (await cloudGet(IMG_KEY_PREFIX + p.id)) || ''
-  })));
-  setSyncStatus('synced', useCloudStorage
-    ? `Synced — ${withImages.length} report${withImages.length !== 1 ? 's' : ''} loaded from cloud`
-    : `Loaded — ${withImages.length} report${withImages.length !== 1 ? 's' : ''} from local storage`);
-  return withImages;
-}
- 
-async function deleteProjectFromStorage(id) {
-  await cloudDelete(IMG_KEY_PREFIX + id);
-  // Re-save index without this project (handled by caller)
-}
- 
-async function saveComments(commentsObj) {
-  await cloudSet(COMMENTS_KEY, JSON.stringify(commentsObj));
-}
- 
-async function loadComments() {
-  const raw = await cloudGet(COMMENTS_KEY);
-  try { return raw ? JSON.parse(raw) : {}; } catch (e) { return {}; }
-}
+document.getElementById('avatarInput').addEventListener('change', async function () {
+  if (!this.files[0]) return;
+  setSyncStatus('syncing', 'Uploading avatar…');
+  const reader = new FileReader();
+  reader.onload = async e => {
+    try {
+      const blob = await (await fetch(e.target.result)).blob();
+      const ref  = storage.ref('avatar/profile');
+      await ref.put(blob, { contentType: blob.type });
+      const url  = await ref.getDownloadURL();
+      await AVATAR_DOC.set({ url });
+      const img = document.getElementById('avatarImg');
+      img.src = url; img.classList.add('show');
+      document.getElementById('avInit').style.display = 'none';
+      setSyncStatus('synced', 'Avatar synced across all devices');
+    } catch (err) {
+      setSyncStatus('error', 'Avatar upload failed: ' + err.message);
+    }
+  };
+  reader.readAsDataURL(this.files[0]);
+});
  
 /* ═══════════════════════════════════════════
    RUNTIME STATE
@@ -936,10 +990,7 @@ let comments = {};
 const PAGES = ['home','about','skills','reports','experience','contact'];
  
 function showPage(id) {
-  PAGES.forEach(p => {
-    const el = document.getElementById(p);
-    if (el) el.classList.remove('active');
-  });
+  PAGES.forEach(p => { const el = document.getElementById(p); if (el) el.classList.remove('active'); });
   const ft = document.getElementById('mainFooter');
   if (ft) ft.style.display = (id === 'contact' || id === 'home') ? 'flex' : 'none';
   const target = document.getElementById(id);
@@ -963,47 +1014,23 @@ function observeReveals() { document.querySelectorAll('.reveal:not(.vis)').forEa
 observeReveals();
  
 /* ═══════════════════════════════════════════
-   AVATAR (cloud-synced)
-═══════════════════════════════════════════ */
-async function loadAvatar() {
-  const saved = await cloudGet(AVATAR_KEY);
-  if (saved) {
-    const img = document.getElementById('avatarImg');
-    img.src = saved; img.classList.add('show');
-    document.getElementById('avInit').style.display = 'none';
-  }
-}
- 
-document.getElementById('avatarInput').addEventListener('change', function () {
-  if (!this.files[0]) return;
-  const r = new FileReader();
-  r.onload = async e => {
-    const img = document.getElementById('avatarImg');
-    img.src = e.target.result; img.classList.add('show');
-    document.getElementById('avInit').style.display = 'none';
-    await cloudSet(AVATAR_KEY, e.target.result);
-  };
-  r.readAsDataURL(this.files[0]);
-});
- 
-/* ═══════════════════════════════════════════
    COMMENTS
 ═══════════════════════════════════════════ */
 function toggleComments(btn, id) { btn.classList.toggle('open'); document.getElementById('cb-' + id).classList.toggle('open'); }
  
 async function postComment(id) {
-  const inp = document.getElementById('ci-' + id) || document.getElementById('dm-ci-' + id);
+  const inp = document.getElementById('ci-' + id);
   if (!inp) return;
   const txt = inp.value.trim(); if (!txt) return;
   if (!comments[id]) comments[id] = [];
   comments[id].push({ name: 'You', text: txt, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
-  await saveComments(comments);
+  await fbSaveComments(comments);
   renderComments(id); inp.value = '';
 }
  
 async function deleteComment(id, idx) {
   comments[id].splice(idx, 1);
-  await saveComments(comments);
+  await fbSaveComments(comments);
   renderComments(id);
 }
  
@@ -1026,7 +1053,7 @@ function renderComments(id) {
 function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
  
 /* ═══════════════════════════════════════════
-   UPLOAD
+   UPLOAD FLOW
 ═══════════════════════════════════════════ */
 let pendingFiles = [], pendingIdx = 0;
 const dropZone   = document.getElementById('dropZone');
@@ -1044,21 +1071,20 @@ const tagClasses = {
 function checkEmpty() {
   const cards = reportGrid.querySelectorAll('.rp-card');
   emptyState.style.display = cards.length === 0 ? 'flex' : 'none';
-  updateCount();
+  const el = document.getElementById('uploadCount');
+  const n  = projects.length;
+  if (el) el.textContent = `${n} image${n !== 1 ? 's' : ''} uploaded`;
   const stat = document.getElementById('home-stat-projects');
   if (stat) stat.textContent = projects.length;
 }
  
-function updateCount() {
-  const el = document.getElementById('uploadCount');
-  const n  = projects.length;
-  if (el) el.textContent = `${n} image${n !== 1 ? 's' : ''} uploaded`;
-}
- 
-dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('hovered'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('hovered'));
+dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('hovered'); });
+dropZone.addEventListener('dragleave', ()  => dropZone.classList.remove('hovered'));
 dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('hovered'); startUpload(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'))); });
 fileInput.addEventListener('change', () => { if (fileInput.files.length) startUpload(Array.from(fileInput.files)); });
+ 
+// Store the pending data URL for the current modal
+let _pendingDataUrl = '';
  
 function startUpload(files) { pendingFiles = files; pendingIdx = 0; openNextModal(); }
  
@@ -1067,8 +1093,8 @@ function openNextModal() {
   const file = pendingFiles[pendingIdx++];
   const r = new FileReader();
   r.onload = e => {
-    const src = e.target.result;
-    document.getElementById('mPreview').innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover"/>`;
+    _pendingDataUrl = e.target.result;
+    document.getElementById('mPreview').innerHTML = `<img src="${_pendingDataUrl}" style="width:100%;height:100%;object-fit:cover"/>`;
     document.getElementById('mTitle').value  = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
     document.getElementById('mDesc').value   = '';
     document.getElementById('mTools').value  = 'Power BI, Excel';
@@ -1077,9 +1103,9 @@ function openNextModal() {
     document.getElementById('mHl2').value    = '';
     document.getElementById('mHl3').value    = '';
     document.getElementById('modalBg').classList.add('open');
-    document.getElementById('mSave').onclick = () => {
-      createCard(src);
+    document.getElementById('mSave').onclick = async () => {
       document.getElementById('modalBg').classList.remove('open');
+      await saveAndRenderCard(_pendingDataUrl);
       openNextModal();
     };
   };
@@ -1092,46 +1118,77 @@ document.getElementById('mCancel').addEventListener('click', () => {
 });
  
 /* ═══════════════════════════════════════════
-   CREATE CARD
+   SAVE CARD  (upload image → Firestore → render)
 ═══════════════════════════════════════════ */
-async function createCard(src, existingProject, batchMode = false) {
-  let proj;
-  if (existingProject) {
-    proj = existingProject;
-  } else {
-    const title = document.getElementById('mTitle').value.trim() || 'Untitled Report';
-    const cat   = document.getElementById('mCat').value;
-    const desc  = document.getElementById('mDesc').value.trim() || 'A data analytics report built to deliver actionable business insights.';
-    const hl1   = document.getElementById('mHl1').value.trim();
-    const hl2   = document.getElementById('mHl2').value.trim();
-    const hl3   = document.getElementById('mHl3').value.trim();
-    const tools = document.getElementById('mTools').value.trim();
-    const year  = document.getElementById('mYear').value.trim() || new Date().getFullYear().toString();
-    const id    = 'p' + Date.now();
-    proj = { id, title, cat, desc, hl1, hl2, hl3, tools, year, src };
-    projects.push(proj);
-    await saveProjects(projects);
+async function saveAndRenderCard(dataUrl) {
+  const title = document.getElementById('mTitle').value.trim() || 'Untitled Report';
+  const cat   = document.getElementById('mCat').value;
+  const desc  = document.getElementById('mDesc').value.trim() || 'A data analytics report built to deliver actionable business insights.';
+  const hl1   = document.getElementById('mHl1').value.trim();
+  const hl2   = document.getElementById('mHl2').value.trim();
+  const hl3   = document.getElementById('mHl3').value.trim();
+  const tools = document.getElementById('mTools').value.trim();
+  const year  = document.getElementById('mYear').value.trim() || new Date().getFullYear().toString();
+  const id    = 'p' + Date.now();
+ 
+  setSyncStatus('syncing', 'Uploading image to Firebase Storage…');
+  let imageUrl;
+  try {
+    imageUrl = await uploadImageToStorage(id, dataUrl);
+  } catch (err) {
+    setSyncStatus('error', 'Image upload failed: ' + err.message);
+    return;
   }
  
-  const { id, title, cat, desc, hl1, hl2, hl3, tools, year } = proj;
-  const tc = tagClasses[cat] || 't-dim';
+  const proj = { id, title, cat, desc, hl1, hl2, hl3, tools, year, src: imageUrl };
+  projects.push(proj);
+ 
+  setSyncStatus('syncing', 'Saving metadata to Firestore…');
+  try {
+    await fbSaveProject(proj);
+    setSyncStatus('synced', `Synced — ${projects.length} report${projects.length !== 1 ? 's' : ''} on Firebase`);
+  } catch (err) {
+    setSyncStatus('error', 'Firestore save failed: ' + err.message);
+  }
+ 
+  const { thumb, card } = buildCardElements(proj);
+  strip.appendChild(thumb);
+ 
+  card.style.opacity = '0'; card.style.transform = 'translateY(24px)';
+  reportGrid.appendChild(card);
+  requestAnimationFrame(() => {
+    card.style.transition = 'opacity .5s ease,transform .5s ease';
+    card.style.opacity = '1'; card.style.transform = 'none';
+  });
+ 
+  renderComments(id);
+  checkEmpty();
+  fileInput.value = '';
+  renderHomePreview();
+}
+ 
+/* ═══════════════════════════════════════════
+   BUILD CARD DOM  (used by both new & loaded)
+═══════════════════════════════════════════ */
+function buildCardElements(proj) {
+  const { id, title, cat, desc, hl1, hl2, hl3, tools, year, src } = proj;
+  const tc          = tagClasses[cat] || 't-dim';
   const toolTagsStr = tools ? tools.split(',').map(t => `<span class="tag t-em">${escHtml(t.trim())}</span>`).join('') : '';
   const shortDesc   = desc.length > 105 ? desc.slice(0, 102) + '…' : desc;
-  const safeSrc     = src;
  
   // Thumb
   const thumb = document.createElement('div');
   thumb.className = 's-thumb'; thumb.dataset.cardId = id;
   const sn = title.length > 16 ? title.slice(0, 14) + '…' : title;
-  thumb.innerHTML = `<img src="${safeSrc}" alt="${escHtml(title)}"/><div class="s-label">${escHtml(sn)}</div><button class="s-del" onclick="removeCard('${id}',this.closest('.s-thumb'))" title="Remove">×</button>`;
-  thumb.querySelector('img').onclick = () => openLightbox(safeSrc);
+  thumb.innerHTML = `<img src="${src}" alt="${escHtml(title)}"/><div class="s-label">${escHtml(sn)}</div><button class="s-del" onclick="removeCard('${id}',this.closest('.s-thumb'))" title="Remove">×</button>`;
+  thumb.querySelector('img').onclick = () => openLightbox(src);
  
   // Card
   const card = document.createElement('div');
   card.className = 'rp-card'; card.dataset.id = id;
   card.innerHTML = `
     <div class="rp-img">
-      <img src="${safeSrc}" alt="${escHtml(title)}" onclick="openLightbox(this.src)"/>
+      <img src="${src}" alt="${escHtml(title)}" onclick="openLightbox(this.src)"/>
       <div class="rp-img-overlay"></div>
       <div class="rp-badge"><span class="tag ${tc}">${escHtml(cat)}</span></div>
       <button class="rp-expand">⤢</button>
@@ -1162,23 +1219,7 @@ async function createCard(src, existingProject, batchMode = false) {
       <div class="rp-tools">${toolTagsStr}</div>
       <button class="rp-del" onclick="removeCard('${id}',null)">Remove</button>
     </div>`;
-  card.querySelector('.rp-expand').onclick = () => openLightbox(safeSrc);
- 
-  if (!batchMode) {
-    strip.appendChild(thumb);
-    reportGrid.appendChild(card);
-    if (!existingProject) {
-      card.style.opacity = '0'; card.style.transform = 'translateY(24px)';
-      requestAnimationFrame(() => {
-        card.style.transition = 'opacity .5s ease,transform .5s ease';
-        card.style.opacity = '1'; card.style.transform = 'none';
-      });
-    }
-    renderComments(id);
-    checkEmpty();
-    fileInput.value = '';
-    renderHomePreview();
-  }
+  card.querySelector('.rp-expand').onclick = () => openLightbox(src);
  
   return { thumb, card };
 }
@@ -1190,8 +1231,13 @@ async function removeCard(id, thumbEl) {
   const t = thumbEl || strip.querySelector(`[data-card-id="${id}"]`);
   if (t) { t.style.transition = 'opacity .28s'; t.style.opacity = '0'; setTimeout(() => t.remove(), 280); }
   projects = projects.filter(p => p.id !== id);
-  await deleteProjectFromStorage(id);
-  await saveProjects(projects);
+  setSyncStatus('syncing', 'Deleting from Firebase…');
+  try {
+    await fbDeleteProject(id);
+    setSyncStatus('synced', `Synced — ${projects.length} report${projects.length !== 1 ? 's' : ''} on Firebase`);
+  } catch (err) {
+    setSyncStatus('error', 'Delete failed: ' + err.message);
+  }
   checkEmpty();
   renderHomePreview();
 }
@@ -1299,20 +1345,23 @@ document.addEventListener('keydown', e => {
 });
  
 /* ═══════════════════════════════════════════
-   BOOT — load everything from cloud on start
+   BOOT — load everything from Firebase on start
 ═══════════════════════════════════════════ */
 async function boot() {
-  // Load projects and comments in parallel
-  [projects, comments] = await Promise.all([loadProjects(), loadComments()]);
+  setSyncStatus('syncing', 'Connecting to Firebase…');
  
-  // Load avatar
+  try {
+    [projects, comments] = await Promise.all([fbLoadProjects(), fbLoadComments()]);
+  } catch (err) {
+    setSyncStatus('error', 'Firebase connection failed: ' + err.message);
+    projects = []; comments = {};
+  }
+ 
   await loadAvatar();
  
-  // Render all projects
-  const stripEl    = document.getElementById('uploadedStrip');
-  const gridEl     = document.getElementById('reportGrid');
-  stripEl.innerHTML = '';
-  gridEl.querySelectorAll('.rp-card').forEach(c => c.remove());
+  // Clear and re-render grid
+  strip.innerHTML = '';
+  reportGrid.querySelectorAll('.rp-card').forEach(c => c.remove());
  
   if (projects.length) {
     const stripFrag = document.createDocumentFragment();
@@ -1320,18 +1369,17 @@ async function boot() {
  
     for (const proj of projects) {
       if (proj.src) {
-        const { thumb, card } = await createCard(proj.src, proj, true);
+        const { thumb, card } = buildCardElements(proj);
         stripFrag.appendChild(thumb);
         gridFrag.appendChild(card);
       }
     }
  
-    stripEl.appendChild(stripFrag);
+    strip.appendChild(stripFrag);
  
-    // Stagger entrance
     const cards = Array.from(gridFrag.querySelectorAll('.rp-card'));
     cards.forEach(card => { card.style.opacity = '0'; card.style.transform = 'translateY(20px)'; });
-    gridEl.appendChild(gridFrag);
+    reportGrid.appendChild(gridFrag);
     requestAnimationFrame(() => {
       cards.forEach((card, i) => {
         setTimeout(() => {
@@ -1343,12 +1391,14 @@ async function boot() {
     });
  
     projects.forEach(p => renderComments(p.id));
+    setSyncStatus('synced', `Synced — ${projects.length} report${projects.length !== 1 ? 's' : ''} loaded from Firebase`);
+  } else {
+    setSyncStatus('synced', 'Firebase ready — upload your first report');
   }
  
   checkEmpty();
   renderHomePreview();
  
-  // Navigate to correct page
   const hash = window.location.hash.replace('#', '');
   showPage(PAGES.includes(hash) ? hash : 'home');
 }
