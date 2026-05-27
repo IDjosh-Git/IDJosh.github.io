@@ -824,12 +824,10 @@ footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3
    Reports uploaded on phone appear instantly
    on laptop and any other device.
 ═══════════════════════════════════════════ */
-import { initializeApp }                          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp }                       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, doc, getDoc, setDoc,
          deleteDoc, onSnapshot, collection,
-         query, orderBy, getDocs }              from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { getStorage, ref, uploadString,
-         getDownloadURL, deleteObject }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
+         getDocs }                             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
  
 const firebaseConfig = {
   apiKey:            "AIzaSyA9-TjKC-YTIE8bc0QGjfYE1D1Azb6Xk0g",
@@ -841,37 +839,37 @@ const firebaseConfig = {
   measurementId:     "G-S7WZDG1K3F"
 };
  
-const app      = initializeApp(firebaseConfig);
-const db       = getFirestore(app);
-const fbStore  = getStorage(app);
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
  
 /* ── Sync status UI ── */
 function setSyncStatus(state, text) {
   const dot  = document.getElementById('syncDot');
   const span = document.getElementById('syncStatusText');
   if (!dot || !span) return;
-  dot.className  = 'sync-dot ' + state;
+  dot.className    = 'sync-dot ' + state;
   span.textContent = text;
 }
  
-/* ── Upload image to Firebase Storage, return download URL ── */
-async function uploadImage(id, base64DataUrl) {
-  const imgRef = ref(fbStore, `portfolio/images/${id}`);
-  await uploadString(imgRef, base64DataUrl, 'data_url');
-  return await getDownloadURL(imgRef);
+/* ── Compress image before saving (keeps Firestore doc under 1MB limit) ── */
+function compressImage(base64DataUrl, maxWidth = 1200, quality = 0.75) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const scale  = Math.min(1, maxWidth / img.width);
+      const canvas = document.createElement('canvas');
+      canvas.width  = img.width  * scale;
+      canvas.height = img.height * scale;
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = base64DataUrl;
+  });
 }
  
-/* ── Delete image from Firebase Storage ── */
-async function removeImage(id) {
-  try {
-    await deleteObject(ref(fbStore, `portfolio/images/${id}`));
-  } catch (e) { /* already deleted or never uploaded */ }
-}
- 
-/* ── Save a project doc to Firestore (no image src — stored in Storage) ── */
+/* ── Save a project doc to Firestore (image stored as compressed base64) ── */
 async function saveProjectDoc(proj) {
-  const { src, ...meta } = proj; // don't store base64 in Firestore
-  await setDoc(doc(db, 'portfolio', proj.id), meta);
+  await setDoc(doc(db, 'portfolio', proj.id), proj);
 }
  
 /* ── Delete a project doc ── */
@@ -879,28 +877,28 @@ async function deleteProjectDoc(id) {
   await deleteDoc(doc(db, 'portfolio', id));
 }
  
-/* ── Save comments doc ── */
+/* ── Save comments ── */
 async function saveComments(commentsObj) {
-  await setDoc(doc(db, 'portfolio', '__comments__'), commentsObj);
+  await setDoc(doc(db, 'meta', 'comments'), commentsObj);
 }
  
 /* ── Load comments ── */
 async function loadComments() {
   try {
-    const snap = await getDoc(doc(db, 'portfolio', '__comments__'));
+    const snap = await getDoc(doc(db, 'meta', 'comments'));
     return snap.exists() ? snap.data() : {};
   } catch (e) { return {}; }
 }
  
 /* ── Save avatar ── */
 async function saveAvatar(base64) {
-  await setDoc(doc(db, 'portfolio', '__avatar__'), { data: base64 });
+  await setDoc(doc(db, 'meta', 'avatar'), { data: base64 });
 }
  
 /* ── Load avatar ── */
 async function loadAvatar() {
   try {
-    const snap = await getDoc(doc(db, 'portfolio', '__avatar__'));
+    const snap = await getDoc(doc(db, 'meta', 'avatar'));
     if (snap.exists() && snap.data().data) {
       const img = document.getElementById('avatarImg');
       img.src = snap.data().data; img.classList.add('show');
@@ -909,25 +907,14 @@ async function loadAvatar() {
   } catch (e) {}
 }
  
-/* ── Load all projects once (with image URLs from Storage) ── */
+/* ── Load all projects from Firestore ── */
 async function loadAllProjects() {
   setSyncStatus('syncing', 'Loading reports from Firebase…');
   try {
-    const snap = await getDocs(collection(db, 'portfolio'));
-    const results = [];
-    for (const d of snap.docs) {
-      if (d.id.startsWith('__')) continue; // skip meta docs
-      const data = d.data();
-      // Fetch image URL from Storage
-      let src = '';
-      try {
-        src = await getDownloadURL(ref(fbStore, `portfolio/images/${d.id}`));
-      } catch (e) { src = data.src || ''; } // fallback if stored inline
-      results.push({ ...data, id: d.id, src });
-    }
-    // Sort by creation order (id is timestamp-based)
+    const snap    = await getDocs(collection(db, 'portfolio'));
+    const results = snap.docs.map(d => ({ ...d.data(), id: d.id }));
     results.sort((a, b) => a.id.localeCompare(b.id));
-    setSyncStatus('synced', `✓ Firebase synced — ${results.length} report${results.length !== 1 ? 's' : ''} · updates instantly across all devices`);
+    setSyncStatus('synced', `✓ Synced — ${results.length} report${results.length !== 1 ? 's' : ''} · live across all devices`);
     return results;
   } catch (e) {
     setSyncStatus('error', '⚠ Firebase error: ' + e.message);
@@ -936,18 +923,13 @@ async function loadAllProjects() {
 }
  
 /* ── Real-time listener: when Firestore changes on ANY device, re-render ── */
+let syncInitialized = false;
 function startRealtimeSync() {
-  const q = collection(db, 'portfolio');
-  onSnapshot(q, async (snapshot) => {
-    // Only re-render if there's an actual remote change (not our own write)
-    const newIds = snapshot.docs
-      .filter(d => !d.id.startsWith('__'))
-      .map(d => d.id)
-      .sort();
+  onSnapshot(collection(db, 'portfolio'), async (snapshot) => {
+    if (!syncInitialized) { syncInitialized = true; return; } // skip initial load (already handled by boot)
+    const newIds     = snapshot.docs.map(d => d.id).sort();
     const currentIds = projects.map(p => p.id).sort();
-    const changed = JSON.stringify(newIds) !== JSON.stringify(currentIds);
-    if (changed && projects.length > 0) {
-      // Another device added/removed a report — reload silently
+    if (JSON.stringify(newIds) !== JSON.stringify(currentIds)) {
       setSyncStatus('syncing', 'New changes detected — syncing…');
       projects = await loadAllProjects();
       rebuildGrid();
@@ -1190,18 +1172,12 @@ async function createCard(src, existingProject, batchMode = false) {
     const year  = document.getElementById('mYear').value.trim() || new Date().getFullYear().toString();
     const id    = 'p' + Date.now();
  
-    setSyncStatus('syncing', 'Uploading image to Firebase…');
-    let imageUrl = src;
-    try {
-      imageUrl = await uploadImage(id, src);
-    } catch (e) {
-      console.warn('Image upload failed, using base64 fallback', e);
-    }
+    setSyncStatus('syncing', 'Compressing & saving to Firebase…');
+    const compressed = await compressImage(src);
  
-    proj = { id, title, cat, desc, hl1, hl2, hl3, tools, year, src: imageUrl };
+    proj = { id, title, cat, desc, hl1, hl2, hl3, tools, year, src: compressed };
     projects.push(proj);
  
-    setSyncStatus('syncing', 'Saving report to Firebase…');
     await saveProjectDoc(proj);
     setSyncStatus('synced', `✓ Saved — visible on all your devices instantly`);
   }
@@ -1230,7 +1206,7 @@ async function removeCard(id, thumbEl) {
   if (t) { t.style.transition = 'opacity .28s'; t.style.opacity = '0'; setTimeout(() => t.remove(), 280); }
   projects = projects.filter(p => p.id !== id);
   setSyncStatus('syncing', 'Deleting from Firebase…');
-  await Promise.all([deleteProjectDoc(id), removeImage(id)]);
+  await deleteProjectDoc(id);
   setSyncStatus('synced', `✓ Deleted — removed from all devices`);
   checkEmpty();
   renderHomePreview();
